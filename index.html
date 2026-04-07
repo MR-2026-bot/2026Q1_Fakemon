@@ -70,7 +70,7 @@ body::before {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 600px;
+  max-width: 640px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -104,34 +104,38 @@ body::before {
   font-family: var(--fr);
   font-size: clamp(15px, 3vw, 20px);
   color: var(--muted);
-  margin-bottom: 52px;
+  margin-bottom: 48px;
   letter-spacing: 0.5px;
 }
 
-/* cards */
+/* cards — now 3 in a row */
 .cards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
   width: 100%;
 }
 
-@media (max-width: 440px) {
+@media (max-width: 520px) {
   .cards { grid-template-columns: 1fr; }
+}
+@media (min-width: 521px) and (max-width: 700px) {
+  .cards { grid-template-columns: 1fr 1fr; }
+  .card-dex { grid-column: 1 / -1; max-width: 220px; margin: 0 auto; }
 }
 
 .card {
   background: var(--card);
   border: 1.5px solid var(--border);
   border-radius: 16px;
-  padding: 32px 24px 28px;
+  padding: 28px 20px 22px;
   cursor: pointer;
   text-decoration: none;
   color: var(--text);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   transition: border-color 0.18s, transform 0.15s, box-shadow 0.18s;
   position: relative;
   overflow: hidden;
@@ -147,16 +151,18 @@ body::before {
 }
 .card-battle::before { background: radial-gradient(ellipse at 50% 0%, rgba(232,82,58,0.12) 0%, transparent 70%); }
 .card-guide::before  { background: radial-gradient(ellipse at 50% 0%, rgba(47,134,222,0.12) 0%, transparent 70%); }
+.card-dex::before    { background: radial-gradient(ellipse at 50% 0%, rgba(86,200,122,0.12) 0%, transparent 70%); }
 
 .card:hover { transform: translateY(-5px); }
 .card:hover::before { opacity: 1; }
 .card-battle:hover { border-color: #e8523a; box-shadow: 0 8px 32px rgba(232,82,58,0.2); }
 .card-guide:hover  { border-color: #2e86de; box-shadow: 0 8px 32px rgba(46,134,222,0.2); }
+.card-dex:hover    { border-color: #56c87a; box-shadow: 0 8px 32px rgba(86,200,122,0.2); }
 
 .card:active { transform: translateY(-2px); }
 
 .card-icon {
-  font-size: 56px;
+  font-size: 48px;
   line-height: 1;
   transition: transform 0.15s;
 }
@@ -164,23 +170,24 @@ body::before {
 
 .card-label {
   font-family: var(--px);
-  font-size: clamp(8px, 2vw, 11px);
+  font-size: clamp(7px, 1.8vw, 10px);
   letter-spacing: 2px;
   text-align: center;
 }
 .card-battle .card-label { color: #f08060; }
 .card-guide  .card-label { color: #60a0f0; }
+.card-dex    .card-label { color: #56c87a; }
 
 .card-desc {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
   line-height: 1.6;
   text-align: center;
 }
 
 .card-arrow {
-  margin-top: 4px;
-  font-size: 18px;
+  margin-top: 2px;
+  font-size: 16px;
   opacity: 0;
   transform: translateX(-4px);
   transition: opacity 0.15s, transform 0.15s;
@@ -188,10 +195,11 @@ body::before {
 .card:hover .card-arrow { opacity: 1; transform: translateX(0); }
 .card-battle .card-arrow { color: #f08060; }
 .card-guide  .card-arrow { color: #60a0f0; }
+.card-dex    .card-arrow { color: #56c87a; }
 
 /* footer */
 .footer {
-  margin-top: 40px;
+  margin-top: 36px;
   font-size: 11px;
   color: #333355;
   font-family: var(--px);
@@ -219,6 +227,12 @@ body::before {
       <div class="card-icon">📖</div>
       <div class="card-label">DESIGN GUIDE</div>
       <p class="card-desc">Learn how to build your own Fakemon — stats, moves, types, and a JSON template.</p>
+      <div class="card-arrow">→</div>
+    </a>
+    <a href="fakedex.html" class="card card-dex">
+      <div class="card-icon">🗂️</div>
+      <div class="card-label">FAKEDEX</div>
+      <p class="card-desc">Browse all Fakemon — see their stats, moves, and who made them.</p>
       <div class="card-arrow">→</div>
     </a>
   </div>

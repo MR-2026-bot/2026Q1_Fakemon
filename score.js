@@ -19,13 +19,9 @@ const FakemonScorer = (() => {
   const SPEED_ORDER = { fast: 1, medium: 2, slow: 3 };
 
   // ── Type matchup table ────────────────────────────────────────────────────
-  // TYPE_CHART[attackerType][defenderType] = multiplier (2 = super, 0.5 = not very, 1 = normal)
   const TYPE_CHART = buildTypeChart();
 
   function buildTypeChart() {
-    // All match-ups default to 1. We only declare the non-1 entries.
-    // strong[A] = types that A hits for 2×
-    // weak[A]   = types that A hits for 0.5×
     const strong = {
       Fire:     ['Air', 'Ice', 'Nature', 'Metal'],
       Water:    ['Fire', 'Earth'],
@@ -75,16 +71,15 @@ const FakemonScorer = (() => {
     return row[defenderType] ?? 1;
   }
 
-  // ── Primary statuses: only one at a time ──────────────────────────────────
+  // ── Primary statuses ──────────────────────────────────────────────────────
   const PRIMARY = ['poison', 'burn', 'paralyze', 'sleep'];
 
   // ── Benchmark ─────────────────────────────────────────────────────────────
-  // Average stats matching guide suggested midpoints.
   const BENCHMARK = {
     id: '__benchmark__',
     name: 'Benchmark',
     type: 'Normal',
-    hp: 100, power: 100, speed: 90, defense: 10, accuracy: 90,
+    hp: 100, atk: 100, speed: 90, defense: 10, accuracy: 90,
     moves: [
       { id:'b_atk',    speed:'medium', damage:[15,20], status:null,      statusChance:0,   statTarget:null },
       { id:'b_poison', speed:'medium', damage:[0,0],   status:'poison',  statusChance:0.6, statTarget:null },
@@ -95,22 +90,21 @@ const FakemonScorer = (() => {
 
   // ── Fighter state ─────────────────────────────────────────────────────────
   function mkState(f) {
+    // Support both "power" (old) and "atk" (new) field names
+    const atkStat = f.atk ?? f.power ?? 100;
     return {
-      // base stats (read from JSON, normalised to 100 = baseline)
       hp:          f.hp       ?? 100,
       maxHp:       f.hp       ?? 100,
-      power:       f.power    ?? 100,   // scales outgoing damage
-      speed:       f.speed    ?? 90,    // tiebreaks within same speed tier
-      defense:     f.defense  ?? 10,    // % damage reduction
-      accuracy:    f.accuracy ?? 90,    // base hit chance %
+      atk:         atkStat,
+      speed:       f.speed    ?? 90,
+      defense:     f.defense  ?? 10,
+      accuracy:    f.accuracy ?? 90,
       type:        f.type     || 'Normal',
       moves:       f.moves,
-      // stat modifiers (raised/lowered by statup/statdwn moves)
-      powerMod:    0,   // additive %, e.g. +20 means ×1.20
+      atkMod:      0,
       speedMod:    0,
       defenseMod:  0,
       accuracyMod: 0,
-      // status tracking
       statuses:     [],
       sleepTurns:   0,
       confuseTurns: 0,
@@ -128,18 +122,18 @@ const FakemonScorer = (() => {
     f.statuses.push(status);
     if (status === 'sleep')    { f.sleepTurns   = rng(2, 3); }
     if (status === 'confuse')  { f.confuseTurns = rng(2, 4); }
-    if (status === 'paralyze') { f.speedMod    -= 30; }  // -30 speed points while paralyzed
-    if (status === 'burn')     { f.powerMod    -= 20; }  // -20 power points while burned
+    if (status === 'paralyze') { f.speedMod    -= 30; }
+    if (status === 'burn')     { f.atkMod      -= 20; }
     if (status === 'statup') {
-      const t = statTarget || 'power';
-      if (t === 'power')    { f.powerMod    += 20; f.statupTurns = 3; }
+      const t = statTarget || 'atk';
+      if (t === 'atk' || t === 'power') { f.atkMod      += 20; f.statupTurns = 3; }
       if (t === 'speed')    { f.speedMod    += 20; f.statupTurns = 3; }
       if (t === 'defense')  { f.defenseMod  += 15; f.statupTurns = 3; }
       if (t === 'accuracy') { f.accuracyMod += 15; f.statupTurns = 3; }
     }
     if (status === 'statdwn') {
-      const t = statTarget || 'power';
-      if (t === 'power')    { f.powerMod    -= 20; f.statdwnTurns = 3; }
+      const t = statTarget || 'atk';
+      if (t === 'atk' || t === 'power') { f.atkMod      -= 20; f.statdwnTurns = 3; }
       if (t === 'speed')    { f.speedMod    -= 20; f.statdwnTurns = 3; }
       if (t === 'defense')  { f.defenseMod  -= 15; f.statdwnTurns = 3; }
       if (t === 'accuracy') { f.accuracyMod -= 15; f.statdwnTurns = 3; }
@@ -150,15 +144,14 @@ const FakemonScorer = (() => {
     f.statuses = f.statuses.filter(s => s !== status);
   }
 
-  // ── Effective stats (base + modifier) ─────────────────────────────────────
-  const effPower    = f => Math.max(10,  f.power    + f.powerMod);
+  // ── Effective stats ────────────────────────────────────────────────────────
+  const effAtk      = f => Math.max(10,  f.atk      + f.atkMod);
   const effSpeed    = f => Math.max(1,   f.speed    + f.speedMod);
   const effDefense  = f => Math.max(0,   Math.min(80, f.defense + f.defenseMod));
   const effAccuracy = f => Math.max(10,  Math.min(100, f.accuracy + f.accuracyMod));
 
-  // ── Pre-action checks (sleep / paralyze / confuse / flinch) ──────────────
+  // ── Pre-action checks ─────────────────────────────────────────────────────
   function preActionChecks(f) {
-    // flinch resets each turn after consuming
     if (f.flinched) { f.flinched = false; return { blocked: true, selfDmg: 0 }; }
     if (f.statuses.includes('sleep')) {
       f.sleepTurns--;
@@ -174,17 +167,16 @@ const FakemonScorer = (() => {
 
   // ── Damage calculation ────────────────────────────────────────────────────
   function calcDamage(attacker, defender, base, moveSpeed) {
-    const powerMult   = effPower(attacker) / 100;       // 100 power = 1.0×
+    const atkMult     = effAtk(attacker) / 100;
     const spdMult     = SPEED_MULT[moveSpeed] || 1.0;
     const typeMult    = typeMultiplier(attacker.type, defender.type);
-    const defReduct   = 1 - effDefense(defender) / 100; // defense 20 → 0.8×
-    return Math.max(1, Math.round(base * powerMult * spdMult * typeMult * defReduct));
+    const defReduct   = 1 - effDefense(defender) / 100;
+    return Math.max(1, Math.round(base * atkMult * spdMult * typeMult * defReduct));
   }
 
   // ── Execute one move ──────────────────────────────────────────────────────
   function executeMove(attacker, defender, move) {
-    // Accuracy check
-    if (Math.random() * 100 > effAccuracy(attacker)) return; // miss
+    if (Math.random() * 100 > effAccuracy(attacker)) return;
 
     const isHeal = move.damage && move.damage[1] < 0;
     if (isHeal) {
@@ -199,13 +191,11 @@ const FakemonScorer = (() => {
       defender.hp = Math.max(0, defender.hp - dmg);
       if (move.status && move.statusChance && Math.random() < move.statusChance) {
         const tgt = (move.status === 'statup') ? attacker : defender;
-        // flinch only works if we went first (handled by caller marking flinch)
         applyStatus(tgt, move.status, move.statTarget || null);
       }
       return;
     }
 
-    // Pure status / stat move
     if (move.status) {
       const tgt    = (move.status === 'statup') ? attacker : defender;
       const chance = move.statusChance ?? 1.0;
@@ -224,10 +214,7 @@ const FakemonScorer = (() => {
     if (f.statuses.includes('statup')) {
       f.statupTurns--;
       if (f.statupTurns <= 0) {
-        // reverse the modifier that was applied
-        const t = 'power'; // default; exact reversal handled by just zeroing mod
-        f.powerMod    = Math.max(0, f.powerMod    - 20);
-        f.speedMod    = Math.max(f.speedMod,    f.speedMod);
+        f.atkMod      = Math.max(0, f.atkMod      - 20);
         f.defenseMod  = Math.max(0, f.defenseMod  - 15);
         f.accuracyMod = Math.max(0, f.accuracyMod - 15);
         removeStatus(f, 'statup');
@@ -236,7 +223,7 @@ const FakemonScorer = (() => {
     if (f.statuses.includes('statdwn')) {
       f.statdwnTurns--;
       if (f.statdwnTurns <= 0) {
-        f.powerMod    = Math.min(0, f.powerMod    + 20);
+        f.atkMod      = Math.min(0, f.atkMod      + 20);
         f.speedMod    = Math.min(0, f.speedMod    + 20);
         f.defenseMod  = Math.min(0, f.defenseMod  + 15);
         f.accuracyMod = Math.min(0, f.accuracyMod + 15);
@@ -290,7 +277,6 @@ const FakemonScorer = (() => {
       const mA = pickBestMove(a, b);
       const mB = pickBestMove(b, a);
 
-      // Move speed tier, then fakemon speed stat as tiebreaker
       const tierA = SPEED_ORDER[mA.speed] || 2;
       const tierB = SPEED_ORDER[mB.speed] || 2;
       const aFirst = tierA < tierB || (tierA === tierB && effSpeed(a) >= effSpeed(b));
@@ -304,7 +290,6 @@ const FakemonScorer = (() => {
         if (!blocked) {
           const hpBefore = defender.hp;
           executeMove(attacker, defender, move);
-          // Apply flinch if this was a damage move and attacker went first
           const didDamage = defender.hp < hpBefore;
           if (didDamage && move.status === 'flinch' && move.statusChance && Math.random() < move.statusChance) {
             defender.flinched = true;
@@ -319,7 +304,69 @@ const FakemonScorer = (() => {
       if (a.hp <= 0) return false;
       if (b.hp <= 0) return true;
     }
-    return false; // draw = loss
+    return false;
+  }
+
+  // ── Validation ────────────────────────────────────────────────────────────
+  function validateFakemon(f) {
+    const errors = [];
+    const warnings = [];
+
+    if (!f.id || typeof f.id !== 'string') errors.push('Missing or invalid "id" field (must be a string)');
+    else if (/[\s\/\\'"{}]/.test(f.id)) errors.push(`id "${f.id}" contains invalid characters (no spaces, slashes, or quotes)`);
+
+    if (!f.name || typeof f.name !== 'string') errors.push('Missing or invalid "name" field');
+    if (!f.emoji || typeof f.emoji !== 'string') warnings.push('Missing "emoji" field — will show a placeholder');
+    if (!f.type) errors.push('Missing "type" field');
+    else {
+      const VALID_TYPES = ['Fire','Water','Air','Earth','Electric','Ice','Poison','Dark','Ghost','Metal','Nature','Normal'];
+      if (!VALID_TYPES.includes(f.type)) errors.push(`Unknown type "${f.type}" — valid types: ${VALID_TYPES.join(', ')}`);
+    }
+
+    const STAT_FIELDS = ['hp','speed','defense','accuracy'];
+    for (const s of STAT_FIELDS) {
+      if (f[s] === undefined) warnings.push(`Missing stat "${s}" — will use default`);
+      else if (typeof f[s] !== 'number') errors.push(`Stat "${s}" must be a number, got ${typeof f[s]}`);
+    }
+    // ATK: accept either "atk" or "power"
+    if (f.atk === undefined && f.power === undefined) warnings.push('Missing stat "atk" — will use default');
+    else if (f.atk !== undefined && typeof f.atk !== 'number') errors.push(`Stat "atk" must be a number`);
+    else if (f.power !== undefined && typeof f.power !== 'number') errors.push(`Stat "power" must be a number`);
+
+    if (!Array.isArray(f.moves)) {
+      errors.push('Missing or invalid "moves" array');
+    } else {
+      if (f.moves.length < 4) warnings.push(`Only ${f.moves.length} moves — guide recommends 4–8`);
+      if (f.moves.length > 8) warnings.push(`${f.moves.length} moves — guide recommends max 8`);
+      const hasDmg = f.moves.some(m => m.damage && m.damage[1] > 0);
+      if (!hasDmg) warnings.push('No damage moves found — Fakemon may never finish a fight');
+
+      const ids = new Set();
+      f.moves.forEach((m, i) => {
+        const mLabel = `Move ${i+1} (${m.name || m.id || 'unnamed'})`;
+        if (!m.id) errors.push(`${mLabel}: missing "id" field`);
+        else if (ids.has(m.id)) errors.push(`Duplicate move id "${m.id}"`);
+        else ids.add(m.id);
+
+        if (!m.name) warnings.push(`${mLabel}: missing "name" field`);
+        if (!['fast','medium','slow'].includes(m.speed)) errors.push(`${mLabel}: "speed" must be "fast", "medium", or "slow" — got "${m.speed}"`);
+        if (!Array.isArray(m.damage) || m.damage.length !== 2) errors.push(`${mLabel}: "damage" must be an array of two numbers, e.g. [10, 20]`);
+        else {
+          if (typeof m.damage[0] !== 'number' || typeof m.damage[1] !== 'number') errors.push(`${mLabel}: both damage values must be numbers`);
+          if (m.damage[0] > m.damage[1] && m.damage[1] > 0) warnings.push(`${mLabel}: damage min (${m.damage[0]}) is greater than max (${m.damage[1]})`);
+        }
+        if (m.statusChance !== undefined && (typeof m.statusChance !== 'number' || m.statusChance < 0 || m.statusChance > 1)) {
+          errors.push(`${mLabel}: "statusChance" must be a number between 0 and 1`);
+        }
+        const VALID_STATUSES = ['poison','burn','paralyze','sleep','confuse','flinch','statup','statdwn',null,undefined];
+        if (!VALID_STATUSES.includes(m.status)) errors.push(`${mLabel}: unknown status "${m.status}"`);
+      });
+    }
+
+    if (!f.description) warnings.push('Missing "description" field');
+    if (!f.createdBy) warnings.push('Missing "createdBy" field');
+
+    return { errors, warnings, valid: errors.length === 0 };
   }
 
   // ── Public API ────────────────────────────────────────────────────────────
@@ -333,6 +380,6 @@ const FakemonScorer = (() => {
 
   function rng(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
 
-  return { calcPowerLevel, typeMultiplier };
+  return { calcPowerLevel, typeMultiplier, validateFakemon };
 
 })();

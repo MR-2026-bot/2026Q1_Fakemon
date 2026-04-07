@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fakedex — Fakemon Battle</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #0d0d1a;
+  --surface: #161628;
+  --card:    #1e1e38;
+  --border:  #2e2e50;
+  --accent:  #f5c842;
+  --text:    #e8e8f0;
+  --muted:   #7070a0;
+  --green:   #56c87a;
+  --orange:  #e8943a;
+  --red:     #e85d5d;
+  --px: 'Press Start 2P', monospace;
+  --ui: 'DM Sans', sans-serif;
+  --r: 12px;
+  --rs: 6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--ui);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 60px;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px);
+  pointer-events: none;
+  z-index: 999;
+}
+
+.page-wrap { width: 100%; max-width: 720px; }
+
+/* ── HOME LINK ── */
+.home-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--px); font-size: 8px; color: var(--muted);
+  text-decoration: none; letter-spacing: 1px;
+  border: 1px solid var(--border); border-radius: var(--rs);
+  padding: 6px 10px; margin-bottom: 16px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.home-link:hover { color: var(--accent); border-color: var(--accent); }
+
+h1 {
+  font-family: var(--px);
+  font-size: clamp(10px, 2.5vw, 15px);
+  color: var(--accent);
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(245,200,66,0.4);
+}
+.subtitle { font-size: 12px; color: var(--muted); margin-bottom: 24px; text-align: center; }
+
+/* ── DEBUG WINDOW ── */
+#debug-panel {
+  width: 100%;
+  background: #0a0a14;
+  border: 1.5px solid #3a2a60;
+  border-radius: var(--r);
+  margin-bottom: 18px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  overflow: hidden;
+}
+#debug-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 14px;
+  background: #14103a;
+  cursor: pointer;
+  user-select: none;
+}
+#debug-header-label {
+  font-family: var(--px); font-size: 7px; color: #a080f0; letter-spacing: 1px;
+}
+#debug-toggle {
+  font-family: var(--px); font-size: 7px; color: #7060b0;
+  background: none; border: 1px solid #3a2a60; border-radius: 4px;
+  padding: 3px 8px; cursor: pointer; transition: color 0.15s, border-color 0.15s;
+}
+#debug-toggle:hover { color: #a080f0; border-color: #a080f0; }
+#debug-body {
+  padding: 10px 14px;
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+#debug-body.collapsed { display: none; }
+.dlog { padding: 2px 0; line-height: 1.5; border-bottom: 1px solid #1a1430; }
+.dlog:last-child { border-bottom: none; }
+.dlog-info  { color: #80c0ff; }
+.dlog-ok    { color: #56c87a; }
+.dlog-warn  { color: #f5c842; }
+.dlog-error { color: #e85d5d; font-weight: bold; }
+.dlog-score { color: #f0a0f0; }
+#debug-clear {
+  font-family: var(--px); font-size: 7px; color: #503060;
+  background: none; border: none; cursor: pointer; padding: 3px 8px;
+}
+#debug-clear:hover { color: #a080f0; }
+
+/* ── GALLERY ── */
+#gallery-loading {
+  text-align: center; padding: 60px 0;
+  font-family: var(--px); font-size: 9px; color: var(--muted); letter-spacing: 1px;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+.gallery-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px 14px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.12s, box-shadow 0.15s;
+  text-align: center;
+  position: relative;
+}
+.gallery-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(245,200,66,0.14);
+}
+.gallery-card.error-card {
+  border-color: var(--red);
+  cursor: default;
+  opacity: 0.7;
+}
+.gallery-card.error-card:hover { transform: none; box-shadow: none; }
+.gc-num {
+  position: absolute; top: 8px; left: 10px;
+  font-family: var(--px); font-size: 7px; color: #333355; letter-spacing: 1px;
+}
+.gc-emoji { font-size: 42px; display: block; margin-bottom: 10px; line-height: 1; }
+.gc-name  { font-family: var(--px); font-size: 7px; color: var(--text); margin-bottom: 6px; letter-spacing: 1px; }
+.gc-type  { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-bottom: 6px; }
+.gc-author { font-size: 9px; color: #444466; margin-top: 4px; }
+.gc-power  { font-size: 10px; color: var(--muted); margin-top: 4px; }
+.gc-error  { font-size: 9px; color: var(--red); margin-top: 6px; font-weight: 600; }
+
+/* ── TYPE STYLES ── */
+.type-Fire     { background:#3d1a10; color:#f08060; border:1px solid #f08060; }
+.type-Water    { background:#0e1e3a; color:#60a0f0; border:1px solid #60a0f0; }
+.type-Air      { background:#0e2030; color:#7ec8e3; border:1px solid #7ec8e3; }
+.type-Earth    { background:#2a1e08; color:#c8a040; border:1px solid #c8a040; }
+.type-Electric { background:#2e2200; color:#f5c842; border:1px solid #f5c842; }
+.type-Ice      { background:#0e1e2e; color:#80d8f0; border:1px solid #80d8f0; }
+.type-Poison   { background:#1e0e2e; color:#b07edc; border:1px solid #b07edc; }
+.type-Dark     { background:#1a1020; color:#9070c0; border:1px solid #9070c0; }
+.type-Ghost    { background:#1a1a38; color:#818cf8; border:1px solid #818cf8; }
+.type-Metal    { background:#1a1e24; color:#94b4c8; border:1px solid #94b4c8; }
+.type-Nature   { background:#0e2010; color:#60d060; border:1px solid #60d060; }
+.type-Normal   { background:#1e1e1e; color:#a0a0a0; border:1px solid #a0a0a0; }
+
+/* ── DETAIL MODAL ── */
+#modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 1000;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px 16px 40px;
+  overflow-y: auto;
+  backdrop-filter: blur(4px);
+}
+#modal-overlay.open { display: flex; }
+#modal-box {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  width: 100%; max-width: 560px;
+  padding: 28px 24px;
+  position: relative;
+  margin: auto;
+}
+#modal-close {
+  position: absolute; top: 12px; right: 14px;
+  font-family: var(--px); font-size: 8px; color: var(--muted);
+  background: none; border: 1px solid var(--border); border-radius: 4px;
+  padding: 5px 10px; cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+#modal-close:hover { color: var(--accent); border-color: var(--accent); }
+.modal-header {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 18px;
+}
+.modal-emoji { font-size: 60px; line-height: 1; }
+.modal-title { flex: 1; }
+.modal-name {
+  font-family: var(--px); font-size: clamp(10px,3vw,14px);
+  color: var(--text); letter-spacing: 1px; margin-bottom: 6px;
+}
+.modal-author { font-size: 11px; color: #444466; margin-bottom: 6px; }
+.modal-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+.modal-power-badge {
+  font-family: var(--px); font-size: 9px; letter-spacing: 1px;
+  background: #2a2010; color: var(--accent); border: 1px solid var(--accent);
+  border-radius: 6px; padding: 5px 10px; display: inline-block; margin-top: 6px;
+}
+
+.section-label {
+  font-family: var(--px); font-size: 7px; color: var(--muted);
+  letter-spacing: 1px; margin-bottom: 10px; margin-top: 18px;
+  border-bottom: 1px solid var(--border); padding-bottom: 6px;
+}
+
+/* Stat bars */
+.stat-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.stat-line {
+  display: grid; grid-template-columns: 90px 40px 1fr;
+  align-items: center; gap: 8px; font-size: 12px;
+}
+.stat-name { color: var(--muted); font-size: 11px; }
+.stat-val  { color: var(--text); font-weight: 700; text-align: right; font-size: 12px; }
+.stat-track { background: #111122; border-radius: 4px; height: 6px; overflow: hidden; }
+.stat-fill  { height: 100%; border-radius: 4px; }
+
+/* Move list */
+.moves-list { display: flex; flex-direction: column; gap: 8px; }
+.move-row {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--rs); padding: 10px 12px;
+}
+.move-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+.move-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.move-speed-tag {
+  font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 10px;
+}
+.spd-fast   { background:#0e2010; color:#56c87a; border: 1px solid #56c87a; }
+.spd-medium { background:#2a2000; color:#f5c842; border: 1px solid #f5c842; }
+.spd-slow   { background:#2a0e08; color:#e85d5d; border: 1px solid #e85d5d; }
+.move-desc { font-size: 11px; color: var(--muted); line-height: 1.5; margin-bottom: 4px; }
+.move-meta { font-size: 10px; color: #444466; display: flex; gap: 10px; flex-wrap: wrap; }
+.move-meta .dmg  { color: #c0c0e0; }
+.move-meta .sta  { color: #b07edc; }
+
+/* Status chips in modal */
+.status-chip {
+  font-size:10px; font-weight:700; padding:3px 8px; border-radius:6px;
+  border: 1.5px solid; animation: statusPulse 2.2s ease-in-out infinite;
+  display:inline-block;
+}
+@keyframes statusPulse {
+  0%, 100% { filter: brightness(1); box-shadow: 0 0 4px currentColor; opacity: 0.95; }
+  50%       { filter: brightness(1.35); box-shadow: 0 0 12px currentColor; opacity: 1; }
+}
+.status-poison   { background:#1e0a2e; color:#c060f0; border-color:#b07edc; }
+.status-burn     { background:#2e0e08; color:#ff7050; border-color:#e85d5d; }
+.status-paralyze { background:#2a2200; color:#f5c842; border-color:#f5c842; }
+.status-sleep    { background:#0e1030; color:#80a0f0; border-color:#6080d0; }
+.status-confuse  { background:#2a1020; color:#f080b0; border-color:#d06090; }
+.status-statup   { background:#0a2010; color:#56c87a; border-color:#56c87a; }
+.status-statdwn  { background:#2a0e0e; color:#e85d5d; border-color:#e85d5d; }
+.status-flinch   { background:#1a1a10; color:#c8c060; border-color:#c8c060; }
+
+/* Error notice */
+.error-box {
+  background: #200808; border: 1.5px solid var(--red);
+  border-radius: var(--rs); padding: 12px 14px; margin: 16px 0;
+  font-size: 12px; color: #ff8080; line-height: 1.6;
+}
+.error-box strong { display: block; margin-bottom: 6px; font-family: var(--px); font-size: 8px; letter-spacing: 1px; }
+.warn-box {
+  background: #1a1400; border: 1.5px solid #c8a040;
+  border-radius: var(--rs); padding: 12px 14px; margin: 12px 0;
+  font-size: 12px; color: #d4b060; line-height: 1.6;
+}
+.warn-box strong { display: block; margin-bottom: 6px; font-family: var(--px); font-size: 8px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+  <a href="index.html" class="home-link">← HOME</a>
+  <h1>📖 FAKEDEX</h1>
+  <p class="subtitle">all fakemon in this game</p>
+
+  <!-- ── DEBUG PANEL ── -->
+  <div id="debug-panel">
+    <div id="debug-header" onclick="toggleDebug()">
+      <span id="debug-header-label">🐛 DEBUG CONSOLE <span id="debug-count" style="color:#7060b0;">(0 messages)</span></span>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <button id="debug-clear" onclick="event.stopPropagation();clearDebug()">CLEAR</button>
+        <button id="debug-toggle">HIDE ▲</button>
+      </div>
+    </div>
+    <div id="debug-body"></div>
+  </div>
+
+  <div id="gallery-loading" style="text-align:center;padding:60px 0;font-family:var(--px);font-size:9px;color:var(--muted);">loading fakemon…</div>
+  <div class="gallery-grid" id="gallery-grid" style="display:none;"></div>
+</div>
+
+<!-- ── DETAIL MODAL ── -->
+<div id="modal-overlay" onclick="closeModal(event)">
+  <div id="modal-box">
+    <button id="modal-close" onclick="closeModal()">✕ CLOSE</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script src="score.js"></script>
+<script>
+// ════════════════════════════════════════════════════════════════════════
+//  DEBUG SYSTEM
+// ════════════════════════════════════════════════════════════════════════
+let debugCollapsed = false;
+let debugMsgCount = 0;
+
+function dlog(msg, type = 'info') {
+  debugMsgCount++;
+  const body = document.getElementById('debug-body');
+  const el = document.createElement('div');
+  el.className = `dlog dlog-${type}`;
+  const ts = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const prefix = { info: 'ℹ', ok: '✓', warn: '⚠', error: '✗', score: '⭐' }[type] || 'ℹ';
+  el.textContent = `[${ts}] ${prefix} ${msg}`;
+  body.appendChild(el);
+  body.scrollTop = body.scrollHeight;
+  document.getElementById('debug-count').textContent = `(${debugMsgCount} messages)`;
+  if (type === 'error') console.error(`[FAKEDEX] ${msg}`);
+  else if (type === 'warn') console.warn(`[FAKEDEX] ${msg}`);
+  else console.log(`[FAKEDEX] ${msg}`);
+}
+
+function toggleDebug() {
+  debugCollapsed = !debugCollapsed;
+  document.getElementById('debug-body').classList.toggle('collapsed', debugCollapsed);
+  document.getElementById('debug-toggle').textContent = debugCollapsed ? 'SHOW ▼' : 'HIDE ▲';
+}
+
+function clearDebug() {
+  document.getElementById('debug-body').innerHTML = '';
+  debugMsgCount = 0;
+  document.getElementById('debug-count').textContent = '(0 messages)';
+  dlog('Debug log cleared.', 'info');
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  DATA LOADING
+// ════════════════════════════════════════════════════════════════════════
+
+// Stores both successful and failed entries with error info
+let DEXDATA = [];
+
+async function loadAll() {
+  dlog('Fakedex loading started', 'info');
+  try {
+    dlog('Fetching fakemon/fakemonlist.json…', 'info');
+    const listRes = await fetch('fakemon/fakemonlist.json');
+    if (!listRes.ok) throw new Error(`fakemonlist.json HTTP ${listRes.status} — file not found?`);
+    const listData = await listRes.json();
+    dlog(`fakemonlist.json OK — ${listData.fakemon.length} IDs: ${listData.fakemon.join(', ')}`, 'ok');
+
+    // Load all, even broken ones — we want to show errors in the dex
+    const entries = await Promise.all(listData.fakemon.map((id, idx) => loadEntry(id, idx + 1)));
+    DEXDATA = entries.filter(Boolean);
+
+    const good = DEXDATA.filter(e => !e._error);
+    const bad  = DEXDATA.filter(e => e._error);
+
+    dlog(`Load complete: ${good.length} OK, ${bad.length} with errors`, bad.length > 0 ? 'warn' : 'ok');
+
+    // Calculate power for valid entries
+    good.forEach(entry => {
+      const power = FakemonScorer.calcPowerLevel(entry);
+      entry._power = power;
+      dlog(`${entry.name} (${entry.id}): Power Level = ${power}  [Type:${entry.type} HP:${entry.hp} ATK:${entry.atk ?? entry.power ?? 100} SPD:${entry.speed ?? 90}]`, 'score');
+    });
+    bad.forEach(entry => {
+      entry._power = null;
+      dlog(`${entry.id}: SKIPPED power calc (has errors)`, 'warn');
+    });
+
+    buildGallery();
+  } catch (e) {
+    dlog(`FATAL: ${e.message}`, 'error');
+    document.getElementById('gallery-loading').textContent = 'Failed to load fakemon list. Check the debug console.';
+  }
+}
+
+async function loadEntry(id, num) {
+  dlog(`[${num}] Loading fakemon/${id}.json…`, 'info');
+  const entry = { id, _num: num, _error: null, _errorDetails: [], _warnings: [] };
+
+  try {
+    const res = await fetch(`fakemon/${id}.json`);
+    if (!res.ok) {
+      const msg = `HTTP ${res.status} — file 'fakemon/${id}.json' not found`;
+      entry._error = msg;
+      entry._errorDetails = [msg, `Make sure the file is named exactly "${id}.json" and is in the fakemon/ folder`];
+      dlog(`  [${id}] ✗ ${msg}`, 'error');
+      return entry;
+    }
+
+    let raw;
+    try {
+      raw = await res.text();
+      const data = JSON.parse(raw);
+      Object.assign(entry, data);
+    } catch (jsonErr) {
+      const msg = `Invalid JSON: ${jsonErr.message}`;
+      entry._error = msg;
+      // Try to give helpful hints about common JSON mistakes
+      const hints = diagnoseBadJSON(raw || '');
+      entry._errorDetails = [msg, ...hints];
+      hints.forEach(h => dlog(`  [${id}] ✗ ${h}`, 'error'));
+      dlog(`  [${id}] ✗ JSON parse failed: ${jsonErr.message}`, 'error');
+      return entry;
+    }
+
+    // Validate structure
+    const { errors, warnings, valid } = FakemonScorer.validateFakemon(entry);
+    entry._warnings = warnings;
+
+    if (!valid) {
+      entry._error = `${errors.length} validation error(s)`;
+      entry._errorDetails = errors;
+      errors.forEach(e => dlog(`  [${id}] ✗ ${e}`, 'error'));
+      warnings.forEach(w => dlog(`  [${id}] ⚠ ${w}`, 'warn'));
+      dlog(`  [${id}] Fakemon has errors — will appear in dex with error info`, 'warn');
+      return entry;
+    }
+
+    warnings.forEach(w => dlog(`  [${id}] ⚠ ${w}`, 'warn'));
+    dlog(`  [${id}] ✓ ${entry.name} loaded OK`, 'ok');
+    return entry;
+
+  } catch (e) {
+    const msg = `Unexpected error: ${e.message}`;
+    entry._error = msg;
+    entry._errorDetails = [msg];
+    dlog(`  [${id}] ✗ ${msg}`, 'error');
+    return entry;
+  }
+}
+
+function diagnoseBadJSON(raw) {
+  if (!raw.trim()) return ['File is empty'];
+  const hints = [];
+  // Common mistakes
+  if (!raw.trim().startsWith('{')) hints.push('File should start with { (opening curly brace)');
+  if (!raw.trim().endsWith('}')) hints.push('File should end with } (closing curly brace)');
+  // Count braces
+  const opens = (raw.match(/\{/g) || []).length;
+  const closes = (raw.match(/\}/g) || []).length;
+  if (opens !== closes) hints.push(`Mismatched curly braces: found ${opens} opening { and ${closes} closing } — they must match`);
+  const sqOpens = (raw.match(/\[/g) || []).length;
+  const sqCloses = (raw.match(/\]/g) || []).length;
+  if (sqOpens !== sqCloses) hints.push(`Mismatched square brackets: found ${sqOpens} opening [ and ${sqCloses} closing ] — they must match`);
+  // Trailing commas (common mistake)
+  if (/,\s*[\}\]]/.test(raw)) hints.push('Possible trailing comma — check for commas before } or ] (JSON doesn\'t allow trailing commas)');
+  // Single quotes
+  if (/'/.test(raw)) hints.push('JSON requires double quotes " not single quotes \' — check all your string values');
+  // Comments
+  if (/\/\//.test(raw)) hints.push('JSON doesn\'t allow comments (// lines) — remove any comments you added');
+  if (hints.length === 0) hints.push('Check for: missing commas between items, unmatched quotes, or extra characters');
+  return hints;
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  GALLERY
+// ════════════════════════════════════════════════════════════════════════
+
+function buildGallery() {
+  const grid = document.getElementById('gallery-grid');
+  grid.innerHTML = '';
+  DEXDATA.forEach(entry => {
+    const card = document.createElement('div');
+    card.className = 'gallery-card' + (entry._error ? ' error-card' : '');
+
+    if (entry._error) {
+      card.innerHTML = `
+        <span class="gc-num">#${String(entry._num).padStart(3,'0')}</span>
+        <span class="gc-emoji">❌</span>
+        <div class="gc-name">${entry.id}</div>
+        <div class="gc-error">⚠ Load error</div>
+        <div class="gc-author" style="color: #804040;">${entry.createdBy || 'Unknown author'}</div>
+      `;
+      card.onclick = () => openModal(entry);
+    } else {
+      card.innerHTML = `
+        <span class="gc-num">#${String(entry._num).padStart(3,'0')}</span>
+        <span class="gc-emoji">${entry.emoji || '❓'}</span>
+        <div class="gc-name">${entry.name}</div>
+        <span class="gc-type type-${entry.type || 'Normal'}">${entry.type || 'Normal'}</span>
+        <div class="gc-power">⭐ PWR ${entry._power}</div>
+        <div class="gc-author">by ${entry.createdBy || 'Unknown'}</div>
+        ${entry._warnings.length > 0 ? `<div class="gc-error" style="color:#c8a040;">⚠ ${entry._warnings.length} warning(s)</div>` : ''}
+      `;
+      card.onclick = () => openModal(entry);
+    }
+    grid.appendChild(card);
+  });
+
+  document.getElementById('gallery-loading').style.display = 'none';
+  grid.style.display = 'grid';
+  dlog(`Gallery built with ${DEXDATA.length} cards`, 'ok');
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  DETAIL MODAL
+// ════════════════════════════════════════════════════════════════════════
+
+const STATUS_EMOJI = {
+  poison:'🟣', burn:'🔴', paralyze:'⚡',
+  sleep:'💤', confuse:'😵', statup:'📈', statdwn:'📉', flinch:'😦',
+};
+const STATUS_CHIP_CLASS = {
+  poison:'status-poison', burn:'status-burn', paralyze:'status-paralyze',
+  sleep:'status-sleep', confuse:'status-confuse', statup:'status-statup',
+  statdwn:'status-statdwn', flinch:'status-flinch',
+};
+
+function openModal(entry) {
+  dlog(`Viewing detail for: ${entry.id}`, 'info');
+  const content = document.getElementById('modal-content');
+
+  if (entry._error) {
+    content.innerHTML = `
+      <div class="modal-header">
+        <div class="modal-emoji">❌</div>
+        <div class="modal-title">
+          <div class="modal-name">${entry.name || entry.id}</div>
+          <div class="modal-author">by ${entry.createdBy || 'Unknown'} · ID: ${entry.id}</div>
+          <div style="margin-top:6px;font-size:11px;color:var(--red);">This Fakemon could not be loaded.</div>
+        </div>
+      </div>
+      <div class="error-box">
+        <strong>✗ ERROR LOADING ${entry.id}.json</strong>
+        ${entry._errorDetails.map(e => `<div>• ${escHtml(e)}</div>`).join('')}
+      </div>
+      <div class="section-label">▸ HOW TO FIX</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.8;">
+        <div>1. Open your file <code style="background:#111;padding:1px 4px;border-radius:3px;">${entry.id}.json</code> in a text editor</div>
+        <div>2. Fix each error listed above</div>
+        <div>3. Use the Design Guide to check the correct JSON format</div>
+        <div>4. Reload this page to see if it loads correctly</div>
+      </div>
+    `;
+    document.getElementById('modal-overlay').classList.add('open');
+    return;
+  }
+
+  // Build stat bars
+  const atkVal = entry.atk ?? entry.power ?? 100;
+  const stats = [
+    { name: '❤️ HP',       val: entry.hp       ?? 100, max: 140, color: '#e85d5d' },
+    { name: '⚔️ ATK',     val: atkVal,                 max: 120, color: '#f5c842' },
+    { name: '💨 Speed',    val: entry.speed    ?? 90,  max: 120, color: '#56c87a' },
+    { name: '🛡️ Defense', val: entry.defense  ?? 10,  max: 40,  color: '#80d8f0' },
+    { name: '🎯 Accuracy', val: entry.accuracy ?? 90,  max: 100, color: '#b07edc' },
+  ];
+
+  const statsHtml = `
+    <div class="section-label">▸ STATS</div>
+    <div class="stat-row">
+      ${stats.map(s => `
+        <div class="stat-line">
+          <span class="stat-name">${s.name}</span>
+          <span class="stat-val">${s.val}</span>
+          <div class="stat-track">
+            <div class="stat-fill" style="width:${Math.min(100,Math.round((s.val/s.max)*100))}%;background:${s.color};"></div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  // Build move list
+  const movesHtml = `
+    <div class="section-label">▸ MOVES (${entry.moves ? entry.moves.length : 0})</div>
+    <div class="moves-list">
+      ${(entry.moves || []).map(m => {
+        const isHeal = m.damage && m.damage[1] < 0;
+        const dmgText = isHeal
+          ? `Heals ${Math.abs(m.damage[0])} HP`
+          : (m.damage && m.damage[1] > 0)
+            ? `${m.damage[0]}–${m.damage[1]} damage`
+            : 'No damage';
+        const statusText = m.status
+          ? `<span class="status-chip ${STATUS_CHIP_CLASS[m.status] || ''}">${STATUS_EMOJI[m.status]||''}${m.status}${m.statusChance ? ` ${Math.round(m.statusChance*100)}%` : ''}</span>`
+          : '';
+        return `
+          <div class="move-row">
+            <div class="move-top">
+              <span class="move-name">${m.name || m.id}</span>
+              <span class="move-speed-tag spd-${m.speed || 'medium'}">${m.speed || 'medium'}</span>
+            </div>
+            <div class="move-desc">${m.desc || ''}</div>
+            <div class="move-meta">
+              <span class="dmg">📊 ${dmgText}</span>
+              ${statusText}
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  // Warnings
+  const warningsHtml = entry._warnings.length > 0
+    ? `<div class="warn-box"><strong>⚠ WARNINGS (${entry._warnings.length})</strong>${entry._warnings.map(w => `<div>• ${escHtml(w)}</div>`).join('')}</div>`
+    : '';
+
+  content.innerHTML = `
+    <div class="modal-header">
+      <div class="modal-emoji">${entry.emoji || '❓'}</div>
+      <div class="modal-title">
+        <div class="modal-name">${entry.name}</div>
+        <div class="modal-author">by ${entry.createdBy || 'Unknown'} · <span class="gc-type type-${entry.type||'Normal'}" style="font-size:10px;">${entry.type||'Normal'}</span></div>
+        <div class="modal-desc">${entry.description || 'No description.'}</div>
+        ${entry._power !== null ? `<div class="modal-power-badge">⭐ POWER LEVEL: ${entry._power}</div>` : ''}
+      </div>
+    </div>
+    ${warningsHtml}
+    ${statsHtml}
+    ${movesHtml}
+  `;
+
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(event) {
+  if (event && event.target !== document.getElementById('modal-overlay') && !event.target.matches('#modal-close')) return;
+  if (event && event.type === 'click' && document.getElementById('modal-box').contains(event.target) && !event.target.matches('#modal-close')) return;
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Keyboard close
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('modal-overlay').classList.remove('open');
+});
+
+dlog('Fakedex page loaded', 'info');
+loadAll();
+</script>
+</body>
+</html>

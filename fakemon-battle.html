@@ -53,6 +53,17 @@ h1 {
 .hidden { display: none !important; }
 #screen-select, #screen-battle, #screen-over { width: 100%; max-width: 660px; }
 
+/* ── HOME LINK ── */
+.home-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--px); font-size: 8px; color: var(--muted);
+  text-decoration: none; letter-spacing: 1px;
+  border: 1px solid var(--border); border-radius: var(--rs);
+  padding: 6px 10px; margin-bottom: 16px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.home-link:hover { color: var(--accent); border-color: var(--accent); }
+
 /* ── LOADING ── */
 #screen-loading {
   text-align: center;
@@ -62,6 +73,56 @@ h1 {
   color: var(--muted);
   letter-spacing: 1px;
 }
+
+/* ── DEBUG WINDOW ── */
+#debug-panel {
+  width: 100%; max-width: 660px;
+  background: #0a0a14;
+  border: 1.5px solid #3a2a60;
+  border-radius: var(--r);
+  margin-bottom: 18px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  overflow: hidden;
+}
+#debug-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 14px;
+  background: #14103a;
+  cursor: pointer;
+  user-select: none;
+}
+#debug-header-label {
+  font-family: var(--px); font-size: 7px; color: #a080f0; letter-spacing: 1px;
+}
+#debug-toggle {
+  font-family: var(--px); font-size: 7px; color: #7060b0;
+  background: none; border: 1px solid #3a2a60; border-radius: 4px;
+  padding: 3px 8px; cursor: pointer; transition: color 0.15s, border-color 0.15s;
+}
+#debug-toggle:hover { color: #a080f0; border-color: #a080f0; }
+#debug-body {
+  padding: 10px 14px;
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+#debug-body.collapsed { display: none; }
+.dlog { padding: 2px 0; line-height: 1.5; border-bottom: 1px solid #1a1430; }
+.dlog:last-child { border-bottom: none; }
+.dlog-info  { color: #80c0ff; }
+.dlog-ok    { color: #56c87a; }
+.dlog-warn  { color: #f5c842; }
+.dlog-error { color: #e85d5d; font-weight: bold; }
+.dlog-score { color: #f0a0f0; }
+.dlog-battle{ color: #c0c0e0; }
+#debug-clear {
+  font-family: var(--px); font-size: 7px; color: #503060;
+  background: none; border: none; cursor: pointer; padding: 3px 8px;
+}
+#debug-clear:hover { color: #a080f0; }
 
 /* ── SELECT ── */
 #screen-select h2 {
@@ -97,7 +158,7 @@ h1 {
 .choice-desc { font-size: 10px; color: var(--muted); line-height: 1.5; }
 .choice-creator { font-size: 9px; color: #444466; margin-top: 5px; }
 
-/* ── TYPE STYLES — all 12 types from the guide ── */
+/* ── TYPE STYLES ── */
 .type-Fire     { background:#3d1a10; color:#f08060; border:1px solid #f08060; }
 .type-Water    { background:#0e1e3a; color:#60a0f0; border:1px solid #60a0f0; }
 .type-Air      { background:#0e2030; color:#7ec8e3; border:1px solid #7ec8e3; }
@@ -130,7 +191,7 @@ h1 {
 #matchup-hint.stomp  { color: var(--red); }
 
 /* ── BATTLE ── */
-.battle-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.battle-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap: 6px; }
 .turn-badge { font-family:var(--px); font-size:7px; color:var(--muted); letter-spacing:1px; }
 .arena { display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:center; margin-bottom:10px; }
 .fighter-card { background:var(--card); border:1.5px solid var(--border); border-radius:var(--r); padding:12px; }
@@ -143,17 +204,33 @@ h1 {
 .hp-label { font-size:10px; color:var(--muted); display:flex; justify-content:space-between; margin-bottom:4px; }
 .hp-track { background:#111122; border-radius:4px; height:8px; overflow:hidden; margin-bottom:6px; border:1px solid var(--border); }
 .hp-fill { height:100%; border-radius:4px; transition:width 0.4s ease, background 0.4s ease; }
-/* stat mini-bars */
 .stat-row { display:flex; gap:4px; margin-bottom:4px; flex-wrap:wrap; }
 .stat-mini { font-size:8px; color:var(--muted); white-space:nowrap; }
 .stat-mini span { color:var(--text); font-weight:600; }
-.statuses { display:flex; flex-wrap:wrap; gap:3px; min-height:20px; }
-.status-chip { font-size:9px; font-weight:600; padding:2px 6px; border-radius:4px; background:#1a1a30; border:1px solid var(--border); color:var(--muted); }
+.statuses { display:flex; flex-wrap:wrap; gap:4px; min-height:24px; }
+
+/* ── STATUS CHIPS with color-coded glow pulse ── */
+.status-chip {
+  font-size:9px; font-weight:700; padding:3px 8px; border-radius:6px;
+  border: 1.5px solid; animation: statusPulse 2.2s ease-in-out infinite;
+}
+@keyframes statusPulse {
+  0%, 100% { filter: brightness(1); box-shadow: 0 0 4px currentColor; opacity: 0.95; }
+  50%       { filter: brightness(1.35); box-shadow: 0 0 12px currentColor; opacity: 1; }
+}
+.status-poison   { background:#1e0a2e; color:#c060f0; border-color:#b07edc; }
+.status-burn     { background:#2e0e08; color:#ff7050; border-color:#e85d5d; }
+.status-paralyze { background:#2a2200; color:#f5c842; border-color:#f5c842; }
+.status-sleep    { background:#0e1030; color:#80a0f0; border-color:#6080d0; }
+.status-confuse  { background:#2a1020; color:#f080b0; border-color:#d06090; }
+.status-statup   { background:#0a2010; color:#56c87a; border-color:#56c87a; }
+.status-statdwn  { background:#2a0e0e; color:#e85d5d; border-color:#e85d5d; }
+.status-flinch   { background:#1a1a10; color:#c8c060; border-color:#c8c060; }
+
 .vs-col { text-align:center; }
 .vs-text { font-family:var(--px); font-size:8px; color:var(--muted); }
 .power-diff { font-size:8px; color:var(--muted); margin-top:4px; display:block; }
 
-/* type effectiveness flash */
 .type-super { color:#56c87a; font-weight:700; }
 .type-weak  { color:#e85d5d; font-weight:700; }
 
@@ -189,6 +266,7 @@ h1 {
   transition:color 0.15s, border-color 0.15s;
 }
 .icon-btn:hover { color:var(--accent); border-color:var(--accent); }
+.icon-btn.home-btn:hover { color: #80d8f0; border-color: #80d8f0; }
 
 /* ── OVER ── */
 #screen-over {
@@ -202,8 +280,16 @@ h1 {
   font-family:var(--px); font-size:9px; letter-spacing:2px;
   padding:12px 24px; background:var(--accent); color:var(--bg);
   border:none; border-radius:var(--r); cursor:pointer; transition:background 0.15s;
+  margin-right: 10px;
 }
 #play-again-btn:hover { background:#ffd655; }
+#home-from-over {
+  font-family:var(--px); font-size:9px; letter-spacing:2px;
+  padding:12px 24px; background: transparent; color: var(--muted);
+  border: 1px solid var(--border); border-radius:var(--r); cursor:pointer; transition: all 0.15s;
+  text-decoration: none; display: inline-block;
+}
+#home-from-over:hover { color: var(--accent); border-color: var(--accent); }
 
 @media(max-width:480px) {
   .arena { gap:4px; }
@@ -214,8 +300,21 @@ h1 {
 </head>
 <body>
 
+<a href="index.html" class="home-link">← HOME</a>
 <h1>⚔ FAKEMON BATTLE</h1>
 <p class="subtitle">choose your fighter</p>
+
+<!-- ── DEBUG PANEL ── -->
+<div id="debug-panel">
+  <div id="debug-header" onclick="toggleDebug()">
+    <span id="debug-header-label">🐛 DEBUG CONSOLE <span id="debug-count" style="color:#7060b0;">(0 messages)</span></span>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <button id="debug-clear" onclick="event.stopPropagation();clearDebug()">CLEAR</button>
+      <button id="debug-toggle">HIDE ▲</button>
+    </div>
+  </div>
+  <div id="debug-body"></div>
+</div>
 
 <div id="screen-loading">loading fakemon…</div>
 
@@ -228,6 +327,7 @@ h1 {
 
 <div id="screen-battle" class="hidden">
   <div class="battle-header">
+    <button class="icon-btn home-btn" onclick="if(confirm('Return to home?')) window.location.href='index.html'">🏠 HOME</button>
     <span class="turn-badge" id="turn-label">TURN 1</span>
     <button class="icon-btn" id="flee-btn">✕ FLEE</button>
   </div>
@@ -272,10 +372,47 @@ h1 {
   <div id="over-details"></div>
   <p id="over-msg"></p>
   <button id="play-again-btn">▶ PLAY AGAIN</button>
+  <a href="index.html" id="home-from-over">🏠 HOME</a>
 </div>
 
 <script src="score.js"></script>
 <script>
+// ════════════════════════════════════════════════════════════════════════
+//  DEBUG SYSTEM
+// ════════════════════════════════════════════════════════════════════════
+let debugCollapsed = false;
+let debugMsgCount = 0;
+
+function dlog(msg, type = 'info') {
+  debugMsgCount++;
+  const body = document.getElementById('debug-body');
+  const el = document.createElement('div');
+  el.className = `dlog dlog-${type}`;
+  const ts = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const prefix = { info: 'ℹ', ok: '✓', warn: '⚠', error: '✗', score: '⭐', battle: '⚔' }[type] || 'ℹ';
+  el.textContent = `[${ts}] ${prefix} ${msg}`;
+  body.appendChild(el);
+  body.scrollTop = body.scrollHeight;
+  document.getElementById('debug-count').textContent = `(${debugMsgCount} messages)`;
+  // Also log to real console for devs
+  if (type === 'error') console.error(`[FAKEMON] ${msg}`);
+  else if (type === 'warn') console.warn(`[FAKEMON] ${msg}`);
+  else console.log(`[FAKEMON] ${msg}`);
+}
+
+function toggleDebug() {
+  debugCollapsed = !debugCollapsed;
+  document.getElementById('debug-body').classList.toggle('collapsed', debugCollapsed);
+  document.getElementById('debug-toggle').textContent = debugCollapsed ? 'SHOW ▼' : 'HIDE ▲';
+}
+
+function clearDebug() {
+  document.getElementById('debug-body').innerHTML = '';
+  debugMsgCount = 0;
+  document.getElementById('debug-count').textContent = '(0 messages)';
+  dlog('Debug log cleared.', 'info');
+}
+
 // ════════════════════════════════════════════════════════════════════════
 //  CONSTANTS
 // ════════════════════════════════════════════════════════════════════════
@@ -285,10 +422,7 @@ const STATUS_EMOJI = {
   sleep:'💤',  confuse:'😵', statup:'📈', statdwn:'📉', flinch:'😦',
 };
 
-// Primary statuses: a Fakemon can only hold one at a time
 const PRIMARY_STATUSES = ['poison', 'burn', 'paralyze', 'sleep'];
-
-// Move speed: order (lower = acts first) and damage multiplier
 const SPEED_ORDER = { fast: 1, medium: 2, slow: 3 };
 const SPEED_MULT  = { fast: 1.15, medium: 1.0, slow: 0.88 };
 
@@ -320,19 +454,76 @@ let selectedId  = null;
 let state       = null;
 
 async function loadAll() {
+  dlog('Starting Fakemon data load…', 'info');
   try {
+    dlog('Fetching fakemon/fakemonlist.json…', 'info');
     const listRes  = await fetch('fakemon/fakemonlist.json');
+    if (!listRes.ok) throw new Error(`fakemonlist.json returned HTTP ${listRes.status}`);
     const listData = await listRes.json();
-    const loaded   = await Promise.all(
-      listData.fakemon.map(id => fetch(`fakemon/${id}.json`).then(r => r.json()))
+    dlog(`fakemonlist.json loaded OK — ${listData.fakemon.length} entries: ${listData.fakemon.join(', ')}`, 'ok');
+
+    const results = await Promise.allSettled(
+      listData.fakemon.map(id => loadOneFakemon(id))
     );
-    ALL_FAKEMON = loaded.map(f => ({ ...f, _power: FakemonScorer.calcPowerLevel(f) }));
+
+    const loaded = [];
+    results.forEach((r, i) => {
+      if (r.status === 'fulfilled' && r.value) loaded.push(r.value);
+      else dlog(`Failed to load fakemon index ${i} (${listData.fakemon[i]}): ${r.reason}`, 'error');
+    });
+
+    if (loaded.length === 0) throw new Error('No Fakemon loaded successfully!');
+    dlog(`${loaded.length} / ${listData.fakemon.length} Fakemon loaded successfully`, loaded.length === listData.fakemon.length ? 'ok' : 'warn');
+
+    dlog('Running power level simulations (200 battles each)…', 'info');
+    ALL_FAKEMON = loaded.map(f => {
+      const power = FakemonScorer.calcPowerLevel(f);
+      dlog(`${f.name} (${f.id}): Power Level = ${power}  [Type:${f.type} HP:${f.hp} ATK:${f.atk ?? f.power ?? 100} SPD:${f.speed ?? 90} DEF:${f.defense ?? 10} ACC:${f.accuracy ?? 90}]`, 'score');
+      return { ...f, _power: power };
+    });
+
+    dlog('All power levels calculated. Building select screen…', 'ok');
     buildSelectScreen();
     show('screen-select');
   } catch (e) {
+    dlog(`FATAL LOAD ERROR: ${e.message}`, 'error');
     document.getElementById('screen-loading').textContent =
-      'Error loading fakemon. Check that fakemon/ folder is present.';
+      'Error loading fakemon. Check the debug console below and make sure the fakemon/ folder is present.';
     console.error(e);
+  }
+}
+
+async function loadOneFakemon(id) {
+  dlog(`Loading fakemon/${id}.json…`, 'info');
+  try {
+    const res = await fetch(`fakemon/${id}.json`);
+    if (!res.ok) {
+      dlog(`  ✗ fakemon/${id}.json — HTTP ${res.status} (file not found?)`, 'error');
+      return null;
+    }
+    let data;
+    try {
+      data = await res.json();
+    } catch (jsonErr) {
+      dlog(`  ✗ fakemon/${id}.json — INVALID JSON: ${jsonErr.message}`, 'error');
+      dlog(`    Tip: Check for missing commas, unclosed brackets, or mismatched quotes in ${id}.json`, 'warn');
+      return null;
+    }
+    // Validate
+    const { errors, warnings, valid } = FakemonScorer.validateFakemon(data);
+    if (warnings.length > 0) {
+      warnings.forEach(w => dlog(`  ⚠ ${id}.json warning: ${w}`, 'warn'));
+    }
+    if (!valid) {
+      errors.forEach(e => dlog(`  ✗ ${id}.json error: ${e}`, 'error'));
+      dlog(`  ${id}.json has ${errors.length} error(s) — skipping this Fakemon`, 'error');
+      return null;
+    }
+    dlog(`  ✓ fakemon/${id}.json loaded and validated OK (${data.name})`, 'ok');
+    return data;
+  } catch (e) {
+    dlog(`  ✗ Unexpected error loading ${id}.json: ${e.message}`, 'error');
+    return null;
   }
 }
 
@@ -350,7 +541,7 @@ function buildSelectScreen() {
     el.className  = 'fakemon-choice';
     el.dataset.id = f.id;
     el.innerHTML  = `
-      <span class="choice-emoji">${f.emoji}</span>
+      <span class="choice-emoji">${f.emoji || '❓'}</span>
       <div class="choice-name">${f.name}</div>
       <span class="choice-type type-${f.type || 'Normal'}">${f.type || 'Normal'}</span>
       <div class="choice-power">Power: ${f._power}</div>
@@ -375,6 +566,7 @@ function selectFakemon(id) {
   const { text, cls } = matchupLabel(player._power, enemy._power);
   hint.textContent = text;
   hint.className   = cls;
+  dlog(`Selected: ${player.name} (PWR ${player._power}) — likely opponent: ${enemy.name} (PWR ${enemy._power})`, 'info');
 }
 
 document.getElementById('start-btn').onclick = () => {
@@ -383,29 +575,23 @@ document.getElementById('start-btn').onclick = () => {
 
 // ════════════════════════════════════════════════════════════════════════
 //  FIGHTER STATE
-//
-//  All 5 stats are read from the Fakemon JSON.
-//  Separate modifier values track temporary changes from statup/statdwn.
-//  Effective stat = base + modifier (clamped to sane ranges).
 // ════════════════════════════════════════════════════════════════════════
 
 function mkFighter(f) {
+  // Accept both "atk" (new) and "power" (legacy) field names
+  const atkVal = f.atk ?? f.power ?? 100;
   return {
     ...f,
-    // HP
     hp:    f.hp    ?? 100,
     maxHp: f.hp    ?? 100,
-    // Base stats
-    power:    f.power    ?? 100,
+    atk:      atkVal,
     speed:    f.speed    ?? 90,
     defense:  f.defense  ?? 10,
     accuracy: f.accuracy ?? 90,
-    // Stat modifiers — changed by statup / statdwn / burn / paralyze
-    powerMod:    0,
+    atkMod:      0,
     speedMod:    0,
     defenseMod:  0,
     accuracyMod: 0,
-    // Status tracking
     statuses:     [],
     sleepTurns:   0,
     confuseTurns: 0,
@@ -415,8 +601,7 @@ function mkFighter(f) {
   };
 }
 
-// Effective stats (base + current modifier, clamped)
-const effPower    = f => Math.max(10,  f.power    + f.powerMod);
+const effAtk      = f => Math.max(10,  f.atk      + f.atkMod);
 const effSpeed    = f => Math.max(1,   f.speed    + f.speedMod);
 const effDefense  = f => Math.max(0,   Math.min(80, f.defense  + f.defenseMod));
 const effAccuracy = f => Math.max(10,  Math.min(100, f.accuracy + f.accuracyMod));
@@ -428,6 +613,9 @@ const effAccuracy = f => Math.max(10,  Math.min(100, f.accuracy + f.accuracyMod)
 function startBattle(playerId) {
   const pBase = ALL_FAKEMON.find(f => f.id === playerId);
   const eBase = pickEnemy(pBase, ALL_FAKEMON);
+  dlog(`Battle starting: ${pBase.name} (PWR ${pBase._power}) vs ${eBase.name} (PWR ${eBase._power})`, 'battle');
+  dlog(`Player stats — HP:${pBase.hp} ATK:${pBase.atk ?? pBase.power ?? 100} SPD:${pBase.speed ?? 90} DEF:${pBase.defense ?? 10} ACC:${pBase.accuracy ?? 90}`, 'battle');
+  dlog(`Enemy stats  — HP:${eBase.hp} ATK:${eBase.atk ?? eBase.power ?? 100} SPD:${eBase.speed ?? 90} DEF:${eBase.defense ?? 10} ACC:${eBase.accuracy ?? 90}`, 'battle');
   state = {
     player: mkFighter(pBase),
     enemy:  mkFighter(eBase),
@@ -483,14 +671,14 @@ async function doPlayerMove(move) {
   const { player, enemy } = state;
   const enemyMove = enemy.moves[rand(0, enemy.moves.length - 1)];
 
-  // Determine action order:
-  // 1. Lower SPEED_ORDER number goes first
-  // 2. On a tie, higher effective speed stat goes first
-  // 3. On a full tie, player goes first (home advantage)
+  dlog(`Turn ${state.turn}: ${player.name} uses [${move.name}] | ${enemy.name} uses [${enemyMove.name}]`, 'battle');
+
   const tierP = SPEED_ORDER[move.speed]      || 2;
   const tierE = SPEED_ORDER[enemyMove.speed] || 2;
   const playerFirst = tierP < tierE
     || (tierP === tierE && effSpeed(player) >= effSpeed(enemy));
+
+  dlog(`  Speed order: ${player.name} tier=${tierP} eff-spd=${effSpeed(player)} | ${enemy.name} tier=${tierE} eff-spd=${effSpeed(enemy)} → ${playerFirst ? player.name : enemy.name} goes first`, 'battle');
 
   let log = '';
   if (playerFirst) {
@@ -516,6 +704,8 @@ async function doPlayerMove(move) {
   setLog(log.trim() || '…');
   render();
 
+  dlog(`  After turn: ${player.name} HP=${player.hp}/${player.maxHp} | ${enemy.name} HP=${enemy.hp}/${enemy.maxHp}`, 'battle');
+
   if (!state.over) {
     state.busy = false;
     disableMoves(false);
@@ -526,25 +716,28 @@ async function doPlayerMove(move) {
 async function runAction(attacker, defender, move, emojiId, wentFirst) {
   let msg = '';
 
-  // Flinch check (consumed here)
   if (attacker.flinched) {
     attacker.flinched = false;
     msg += ` 😦 ${attacker.name} flinched and couldn't move!`;
+    dlog(`  ${attacker.name} flinched — skipping action`, 'battle');
     render();
     return msg;
   }
 
-  // Sleep / paralyze / confuse checks
   const actResult = canAct(attacker);
   msg += actResult.msg;
-  if (!actResult.can) { render(); return msg; }
+  if (!actResult.can) {
+    dlog(`  ${attacker.name} couldn't act: ${actResult.msg.trim()}`, 'battle');
+    render();
+    return msg;
+  }
 
   animatePop(emojiId);
   await delay(280);
 
-  // Accuracy check
   if (Math.random() * 100 > effAccuracy(attacker)) {
     msg += ` ${attacker.name}'s move missed!`;
+    dlog(`  ${attacker.name} missed! (accuracy=${effAccuracy(attacker)}%)`, 'battle');
     render();
     return msg;
   }
@@ -552,49 +745,53 @@ async function runAction(attacker, defender, move, emojiId, wentFirst) {
   const isHeal = move.damage && move.damage[1] < 0;
 
   if (isHeal) {
-    // Heal — negative damage value heals the attacker
     const amt = Math.abs(move.damage[0]);
     attacker.hp = Math.min(attacker.maxHp, attacker.hp + amt);
     msg += ` 💊 ${attacker.name} recovered ${amt} HP!`;
+    dlog(`  ${attacker.name} healed ${amt} HP (now ${attacker.hp}/${attacker.maxHp})`, 'battle');
 
   } else if (move.damage && move.damage[1] > 0) {
-    // Damage move
     const base    = rand(move.damage[0], move.damage[1]);
     const { dmg, typeMsg } = dealDamage(attacker, defender, base, move.speed);
+    const typeEffectText = typeMsg.includes('Super') ? ' [SUPER EFFECTIVE]' : typeMsg.includes('not very') ? ' [NOT VERY EFFECTIVE]' : '';
     msg += ` ${move.name} dealt ${dmg} damage!${typeMsg}`;
+    dlog(`  ${attacker.name} → ${defender.name}: ${move.name} base=${base} final=${dmg}${typeEffectText} (def HP: ${defender.hp+dmg}→${defender.hp})`, 'battle');
 
-    // Status on hit
     if (move.status && move.statusChance && Math.random() < move.statusChance) {
       const tgt = (move.status === 'statup') ? attacker : defender;
       if (move.status === 'flinch') {
-        // Flinch only works if attacker went first — defender hasn't moved yet
         if (wentFirst) {
           defender.flinched = true;
           msg += ` 😦 ${defender.name} flinched!`;
+          dlog(`  ${defender.name} flinched!`, 'battle');
         }
       } else {
         applyStatus(tgt, move.status, move.statTarget || null);
         msg += ` ${STATUS_EMOJI[move.status] || ''} ${tgt.name} is ${move.status}!`;
+        dlog(`  Status applied: ${move.status} → ${tgt.name}`, 'battle');
       }
     }
 
   } else if (move.status) {
-    // Pure status / stat move (no damage)
     if (move.status === 'statup') {
-      applyStatus(attacker, 'statup', move.statTarget || 'power');
-      const t = move.statTarget || 'power';
+      applyStatus(attacker, 'statup', move.statTarget || 'atk');
+      const t = move.statTarget || 'atk';
       msg += ` 📈 ${attacker.name}'s ${t} rose!`;
+      dlog(`  ${attacker.name} used stat-up (${t})`, 'battle');
     } else if (move.status === 'statdwn') {
-      applyStatus(defender, 'statdwn', move.statTarget || 'power');
-      const t = move.statTarget || 'power';
+      applyStatus(defender, 'statdwn', move.statTarget || 'atk');
+      const t = move.statTarget || 'atk';
       msg += ` 📉 ${defender.name}'s ${t} fell!`;
+      dlog(`  ${defender.name} got stat-down (${t})`, 'battle');
     } else {
       const chance = move.statusChance ?? 1.0;
       if (Math.random() < chance) {
         applyStatus(defender, move.status, move.statTarget || null);
         msg += ` ${move.name}: ${STATUS_EMOJI[move.status] || ''} ${defender.name} is ${move.status}!`;
+        dlog(`  ${defender.name} got status: ${move.status}`, 'battle');
       } else {
         msg += ` ${move.name} missed!`;
+        dlog(`  ${move.name} status missed (chance was ${chance})`, 'battle');
       }
     }
   }
@@ -604,20 +801,12 @@ async function runAction(attacker, defender, move, emojiId, wentFirst) {
 }
 
 // ── Damage formula ────────────────────────────────────────────────────────
-//
-// damage = base × (power/100) × speedMult × typeMult × (1 - defense/100)
-//
-// power stat:   100 = neutral, 120 = hits 20% harder, 80 = hits 20% softer
-// speedMult:    fast=1.15, medium=1.0, slow=0.88
-// typeMult:     2.0 = super effective, 0.5 = not very effective, 1 = normal
-// defense stat: 20 defense = 80% damage taken (20% reduction)
-
 function dealDamage(attacker, defender, base, moveSpeed) {
-  const powerMult = effPower(attacker) / 100;
+  const atkMult   = effAtk(attacker) / 100;
   const spdMult   = SPEED_MULT[moveSpeed] || 1.0;
   const typeMult  = FakemonScorer.typeMultiplier(attacker.type, defender.type);
   const defMult   = 1 - effDefense(defender) / 100;
-  const raw = Math.max(1, Math.round(base * powerMult * spdMult * typeMult * defMult));
+  const raw = Math.max(1, Math.round(base * atkMult * spdMult * typeMult * defMult));
   defender.hp = Math.max(0, defender.hp - raw);
 
   let typeMsg = '';
@@ -635,22 +824,21 @@ function applyStatus(fighter, status, statTarget) {
 
   fighter.statuses.push(status);
 
-  // Each status modifies the appropriate stat
   if (status === 'sleep')    { fighter.sleepTurns   = rand(2, 3); }
   if (status === 'confuse')  { fighter.confuseTurns = rand(2, 4); }
-  if (status === 'paralyze') { fighter.speedMod    -= 30; } // guide: speed drops while paralyzed
-  if (status === 'burn')     { fighter.powerMod    -= 20; } // guide: power reduced while burned
+  if (status === 'paralyze') { fighter.speedMod    -= 30; }
+  if (status === 'burn')     { fighter.atkMod      -= 20; }
 
   if (status === 'statup') {
-    const t = statTarget || 'power';
-    if (t === 'power')    { fighter.powerMod    += 20; fighter.statupTurns = 3; }
+    const t = statTarget || 'atk';
+    if (t === 'atk' || t === 'power') { fighter.atkMod      += 20; fighter.statupTurns = 3; }
     if (t === 'speed')    { fighter.speedMod    += 20; fighter.statupTurns = 3; }
     if (t === 'defense')  { fighter.defenseMod  += 15; fighter.statupTurns = 3; }
     if (t === 'accuracy') { fighter.accuracyMod += 15; fighter.statupTurns = 3; }
   }
   if (status === 'statdwn') {
-    const t = statTarget || 'power';
-    if (t === 'power')    { fighter.powerMod    -= 20; fighter.statdwnTurns = 3; }
+    const t = statTarget || 'atk';
+    if (t === 'atk' || t === 'power') { fighter.atkMod      -= 20; fighter.statdwnTurns = 3; }
     if (t === 'speed')    { fighter.speedMod    -= 20; fighter.statdwnTurns = 3; }
     if (t === 'defense')  { fighter.defenseMod  -= 15; fighter.statdwnTurns = 3; }
     if (t === 'accuracy') { fighter.accuracyMod -= 15; fighter.statdwnTurns = 3; }
@@ -661,7 +849,7 @@ function removeStatus(fighter, status) {
   fighter.statuses = fighter.statuses.filter(s => s !== status);
 }
 
-// ── Pre-action checks (sleep / paralyze / confuse) ────────────────────────
+// ── Pre-action checks ─────────────────────────────────────────────────────
 function canAct(fighter) {
   if (fighter.statuses.includes('sleep')) {
     fighter.sleepTurns--;
@@ -681,10 +869,9 @@ function canAct(fighter) {
   return { can: true, msg: '' };
 }
 
-// ── End-of-turn ticks (DoT, status duration countdown) ───────────────────
+// ── End-of-turn ticks ─────────────────────────────────────────────────────
 function tickStatuses(fighter) {
   let msg = '';
-  // DoT
   if (fighter.statuses.includes('burn')) {
     const d = Math.round(fighter.maxHp * 0.06);
     fighter.hp = Math.max(0, fighter.hp - d);
@@ -695,7 +882,6 @@ function tickStatuses(fighter) {
     fighter.hp = Math.max(0, fighter.hp - d);
     msg += ` 🟣 ${fighter.name} took ${d} poison damage!`;
   }
-  // Confuse countdown
   if (fighter.statuses.includes('confuse')) {
     fighter.confuseTurns--;
     if (fighter.confuseTurns <= 0) {
@@ -703,11 +889,10 @@ function tickStatuses(fighter) {
       msg += ` 😵 ${fighter.name} snapped out of confusion!`;
     }
   }
-  // StatUp countdown — reverse the modifier that was applied
   if (fighter.statuses.includes('statup')) {
     fighter.statupTurns--;
     if (fighter.statupTurns <= 0) {
-      fighter.powerMod    = Math.max(0, fighter.powerMod    - 20);
+      fighter.atkMod      = Math.max(0, fighter.atkMod      - 20);
       fighter.speedMod    = Math.max(0, fighter.speedMod    - 20);
       fighter.defenseMod  = Math.max(0, fighter.defenseMod  - 15);
       fighter.accuracyMod = Math.max(0, fighter.accuracyMod - 15);
@@ -715,11 +900,10 @@ function tickStatuses(fighter) {
       msg += ` 📈 Stat boost faded for ${fighter.name}.`;
     }
   }
-  // StatDwn countdown — reverse the modifier that was applied
   if (fighter.statuses.includes('statdwn')) {
     fighter.statdwnTurns--;
     if (fighter.statdwnTurns <= 0) {
-      fighter.powerMod    = Math.min(0, fighter.powerMod    + 20);
+      fighter.atkMod      = Math.min(0, fighter.atkMod      + 20);
       fighter.speedMod    = Math.min(0, fighter.speedMod    + 20);
       fighter.defenseMod  = Math.min(0, fighter.defenseMod  + 15);
       fighter.accuracyMod = Math.min(0, fighter.accuracyMod + 15);
@@ -739,6 +923,7 @@ function checkDead() {
 
 function endBattle(playerWon) {
   state.over = true;
+  dlog(`Battle ended: ${playerWon ? state.player.name + ' WON' : state.player.name + ' LOST'} after ${state.turn} turns`, playerWon ? 'ok' : 'warn');
   render();
   setTimeout(() => {
     const res = document.getElementById('over-result');
@@ -763,38 +948,39 @@ function endBattle(playerWon) {
 //  RENDER
 // ════════════════════════════════════════════════════════════════════════
 
+const STATUS_CHIP_CLASS = {
+  poison:'status-poison', burn:'status-burn', paralyze:'status-paralyze',
+  sleep:'status-sleep', confuse:'status-confuse', statup:'status-statup',
+  statdwn:'status-statdwn', flinch:'status-flinch',
+};
+
 function render() {
   ['player', 'enemy'].forEach(side => {
     const f   = state[side];
     const pct = clamp(f.hp / f.maxHp, 0, 1);
 
-    // HP bar
     const bar = document.getElementById(`${side}-hp-bar`);
     bar.style.width      = (pct * 100) + '%';
     bar.style.background = pct > 0.5 ? '#56c87a' : pct > 0.25 ? '#e8943a' : '#e85d5d';
     document.getElementById(`${side}-hp-text`).textContent = `${f.hp} / ${f.maxHp}`;
 
-    // Name + type
     document.getElementById(`${side}-name`).textContent = f.name;
     const tEl = document.getElementById(`${side}-type`);
     tEl.textContent = f.type || '';
     tEl.className   = `fighter-type type-${f.type || 'Normal'}`;
 
-    // Emoji
-    document.getElementById(`${side}-emoji`).textContent = f.emoji;
+    document.getElementById(`${side}-emoji`).textContent = f.emoji || '❓';
 
-    // Stat mini-display (shows effective values so players can see modifier effects)
     document.getElementById(`${side}-stats`).innerHTML = [
-      `<span class="stat-mini">⚔️ <span>${effPower(f)}</span></span>`,
+      `<span class="stat-mini">⚔️ <span>${effAtk(f)}</span></span>`,
       `<span class="stat-mini">💨 <span>${effSpeed(f)}</span></span>`,
       `<span class="stat-mini">🛡️ <span>${effDefense(f)}%</span></span>`,
       `<span class="stat-mini">🎯 <span>${effAccuracy(f)}%</span></span>`,
     ].join('');
 
-    // Status chips
     document.getElementById(`${side}-statuses`).innerHTML =
-      f.statuses.map(s => `<span class="status-chip">${STATUS_EMOJI[s] || ''} ${s}</span>`).join('')
-      + (f.flinched ? `<span class="status-chip">😦 flinch</span>` : '');
+      f.statuses.map(s => `<span class="status-chip ${STATUS_CHIP_CLASS[s] || ''}">${STATUS_EMOJI[s] || ''} ${s}</span>`).join('')
+      + (f.flinched ? `<span class="status-chip status-flinch">😦 flinch</span>` : '');
   });
 
   const t = state.turn;
@@ -811,7 +997,6 @@ function render() {
 // ════════════════════════════════════════════════════════════════════════
 
 function setLog(msg) {
-  // Allow HTML in log (for type effectiveness spans)
   document.getElementById('log').innerHTML = msg;
 }
 function disableMoves(d) { document.querySelectorAll('.move-btn').forEach(b => b.disabled = d); }
@@ -837,9 +1022,11 @@ function resetToSelect() {
   document.getElementById('matchup-hint').textContent = '';
   document.getElementById('matchup-hint').className   = '';
   document.getElementById('start-btn').disabled = true;
+  dlog('Returned to select screen', 'info');
   show('screen-select');
 }
 
+dlog('Page loaded — starting Fakemon loader', 'info');
 loadAll();
 </script>
 </body>
