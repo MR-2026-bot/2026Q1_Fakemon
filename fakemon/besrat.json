@@ -1,7 +1,7 @@
-{
+  {
   "id": "yourfakemon",
-  "name": "YourFakemon",
-  "createdBy": "Your Full Name",
+  "name": "Bes25",
+  "createdBy": "Besrat Fikre",
   "emoji": "🐲",
   "type": "Fire",
 
@@ -18,7 +18,7 @@
     {
       "id": "move_one",
       "name": "🔥 Finisher",
-      "desc": "A slashing attack to parylyze.",
+      "desc": "A slashing attack to parylyze the opponent.",
       "speed": "fast",
       "damage": [14, 20],
       "status": "burn",
@@ -57,3 +57,4 @@
 
   ]
 }
+  
