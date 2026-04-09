@@ -22,7 +22,7 @@
   "name": "Head Bash",
   "desc": "Bash Head.",
   "speed": "slow",
-  "damage": [1, 676],
+  "damage": [1, 6767],
   "statuses": [
     {
       "status": "statdwn",
@@ -60,7 +60,7 @@
       "name": "😵 Radioactive Nanab Berry",
       "desc": "Throws a Nanab Berry",
       "speed": "medium",
-      "damage": [1, 1],
+      "damage": [15, 20],
       "status": "Poison",
       "statusChance": 1.0
     }
