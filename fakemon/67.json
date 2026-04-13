@@ -14,8 +14,8 @@
       "desc": "I hate this.",
       "speed": "fast",
       "damage": [
-        1000000000,
-        100000000000
+        1,
+        1000
       ],
       "status": null,
       "statusChance": 0
