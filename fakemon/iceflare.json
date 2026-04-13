@@ -72,13 +72,13 @@
          {
       "status": "statdwn",
       "statusChance": 1,
-      "statTarget": "defence"
+      "statTarget": "defense"
       
     },
         {
       "status": "statdwn",
       "statusChance": 0.8,
-      "statTarget": "defence"
+      "statTarget": "defense"
       
     }
   ]
@@ -115,22 +115,22 @@
 
      {
       "status": "statup",
-      "statTarget" : "defence",
+      "statTarget" : "defense",
       "statusChance": 1
     },
     {
       "status": "statup",
-      "statTarget" : "defence",
+      "statTarget" : "defense",
       "statusChance": 1
     },
     {
       "status": "statup",
-      "statTarget" : "defence",
+      "statTarget" : "defense",
       "statusChance": 0.9
     },
     {
       "status": "statup",
-      "statTarget" : "defence",
+      "statTarget" : "defense",
       "statusChance": 0.8
     }
     ,
