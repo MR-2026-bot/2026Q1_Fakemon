@@ -45,7 +45,7 @@
       "desc":         "Sharply raises your own DEF.",
       "speed":        "medium",
       "damage": [0, 0],
-      "status": "statup",
+      "status": "statUp",
   "statusChance": 1.0,
   "statTarget": "defense"
     }
