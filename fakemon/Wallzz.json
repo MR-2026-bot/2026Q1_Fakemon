@@ -53,7 +53,7 @@
       "id": "Stronk",
       "name": "Tuff",
       "desc": "This wall is now stronger...",
-      "speed": "meduim",
+      "speed": "medium",
       "damage": [-10, 11],
       "status": "statup",
       "statusChance": 1.0
