@@ -65,6 +65,15 @@
       "damage": [20, 25],
       "status": null,
       "statusChance": 0
+    },
+    {
+      "id": "percision",
+      "name": "🎯 Percision_shot",
+      "desc": "A high damage arrow.",
+      "speed": "slow",
+      "damage": [30,35],
+      "status": null,
+      "statusChance": 0
     }
   ]
 }
