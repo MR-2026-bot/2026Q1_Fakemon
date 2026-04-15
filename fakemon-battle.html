@@ -1855,16 +1855,15 @@ function addTestFakemonToRoster() {
   ALL_FAKEMON.push(entry);
   dlog(`🧪 Test Fakemon "${entry.name}" (PWR ${power}) added to roster — ${ALL_FAKEMON.length} total fighters`, 'ok');
 
-  // Rebuild select grids if the select screen is visible or has been built
-  if (!document.getElementById('screen-select').classList.contains('hidden')) {
-    buildSelectScreen();
-    // Re-hide the opponent section since player selection is now stale
-    selectedId      = null;
-    selectedEnemyId = null;
-    document.getElementById('opponent-section').classList.add('hidden');
-    document.getElementById('start-btn').disabled = true;
-    dlog('Select screen rebuilt with test Fakemon included', 'info');
-  }
+
+  // Always rebuild select screen and navigate to it
+  selectedId      = null;
+  selectedEnemyId = null;
+  buildSelectScreen();
+  document.getElementById('opponent-section').classList.add('hidden');
+  document.getElementById('start-btn').disabled = true;
+  show('screen-select');
+  dlog(`Navigated to select screen — pick your test Fakemon!`, 'ok');
 }
 
 // ════════════════════════════════════════════════════════════════════════
