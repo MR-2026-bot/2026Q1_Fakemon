@@ -21,10 +21,8 @@
       "desc": "A medium damage arrow with a posion side effect.",
       "speed": "medium",
       "damage": [15, 20],
-      "status": null,
-      "statusChance":0
-      //"status": "Poison",
-      //"statusChance": 1.0
+      "status": "poison",
+      "statusChance": 1.0
     },
 
     {
