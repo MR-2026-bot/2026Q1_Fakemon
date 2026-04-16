@@ -4,7 +4,11 @@
  "createdBy": "Jesus Taylor",
  "emoji": "🧂",
  "type": "Electric",
- "hp": 300,
+ "hp": 500,
+ "power": 400,
+ "speed": 450, 
+ "defense": 200,
+ "accuracy": 85, 
  "color": "#D3D3D3",
  "description": "Old man with money power.",
  "moves": [
