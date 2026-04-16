@@ -1,0 +1,63 @@
+{
+  "id":          "Cecil_Stedman",
+  "name":        "Cecil Stedman",
+  "createdBy":   "Sean the dumbahh",
+  "emoji":       "⚡🧠👤",
+  "type":        "metal",
+  "description": "SEA SALT... I NEED YOU SEA SALT",
+  "hp":       210,
+  "power":    130,
+  "speed":    100,
+  "defense":  30,
+  "accuracy": 85,
+
+  "moves": [
+    {
+      "id":           "Giant_lazer",
+      "name":         "400B dollar lazer",
+      "desc":         "although powerful, gave omni-man a nosebleed.",
+      "speed":        "medium",
+      "damage": [310, 390],
+      "status":       null,
+      "statusChance": 0
+    },
+    {
+      "id":           "Reaniman",
+      "name":         "Reanimen",
+      "desc":         "Summons strong reanimen to beat the enemy.",
+      "speed":        "medium",
+      "damage": [80, 210],
+      "status":       null,
+      "statusChance": 0
+    },
+    {
+      "id":           "Expensive medisen",
+      "name":         "Overly expensive heals",
+      "desc":         "Restores lots of HP.",
+      "speed":        "slow",
+      "damage": [-60, -140],
+      "status":       null,
+      "statusChance": 0
+    },
+    {
+      "id":           "Cool_tech",
+      "name":         "Cool fancy tech 🤖",
+      "desc":         "Sharply raises your own ATK.",
+      "speed":        "fast",
+      "damage": [10, 25],
+      "status":       "statup",
+      "statusChance": 1.0,
+      "statTarget":   "atk"
+    },
+    {
+      "id":           "Tazer",
+      "name":         "Taser ⚡",
+      "desc":         "I stunned.",
+      "speed":        "medium",
+      "damage": [1, 6],
+      "status":       "paralyze",
+      "statusChance": 0.8
+    }
+
+  ]
+}
