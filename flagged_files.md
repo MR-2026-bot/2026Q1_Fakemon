@@ -1,6 +1,6 @@
 # Fakemon Content Check Report
 
-**Generated:** 2026-04-21 18:57:43  
+**Generated:** 2026-04-21 19:07:44  
 **Files scanned:** 54  
 **Files flagged:** 19  
 
@@ -15,79 +15,9 @@
 > python check_fakemon.py --apply
 > ```
 
-## 🚩 `Dylan.json`
+## ⚠️ Needs Teacher Review — Content Flags
 
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "Dylan.json" but id is "yourfakemon". The "id" field must exactly match the filename (case-sensitive).` | `` |
-
-## 🚩 `Gorgrigralla.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Case mismatch — filename is "Gorgrigralla.json" but id is "gorgrigralla". Did you mean id: "Gorgrigralla"?  (IDs are case-sensitive)` | `` |
-
-## 🚩 `Milo.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Case mismatch — filename is "Milo.json" but id is "milo". Did you mean id: "Milo"?  (IDs are case-sensitive)` | `` |
-
-## 🚩 `RUBEN_ESTRADA.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "RUBEN_ESTRADA.json" but id is "volkong". The "id" field must exactly match the filename (case-sensitive).` | `` |
-
-## 🚩 `Snivix.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Case mismatch — filename is "Snivix.json" but id is "snivix". Did you mean id: "Snivix"?  (IDs are case-sensitive)` | `` |
-
-## 🚩 `Wallzz.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Case mismatch — filename is "Wallzz.json" but id is "wallzz". Did you mean id: "Wallzz"?  (IDs are case-sensitive)` | `` |
-
-## 🚩 `Yuji.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "Yuji.json" but id is "yourfakemon". The "id" field must exactly match the filename (case-sensitive).` | `` |
-
-## 🚩 `aidan.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Could not parse JSON to check id field: Expecting value: line 34 column 17 (char 704)` | `` |
-
-## 🚩 `caypybara.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "caypybara.json" but id is "kyan1_1". The "id" field must exactly match the filename (case-sensitive).` | `` |
-
-## 🚩 `hi.json`
+### 🚩 `hi.json`
 
 **1 issue(s)**
 
@@ -95,7 +25,7 @@
 |------|----------|--------|-------------------|-----------|
 | 18 | 😠 Bullying/Targeting | REVIEW ONLY | `useless` | `"desc":         "Mock this useless creature.",` |
 
-## 🚩 `immortal.json`
+### 🚩 `immortal.json`
 
 **1 issue(s)**
 
@@ -103,23 +33,7 @@
 |------|----------|--------|-------------------|-----------|
 | 7 | 😠 Bullying/Targeting | REVIEW ONLY | `weak` | `"description": "WHERE IS OMNI-MAN? WHERE IS HE!!!  Is weak to viltramites and sea salt.",` |
 
-## 🚩 `jacob.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "jacob.json" but id is "Conquest". The "id" field must exactly match the filename (case-sensitive).` | `` |
-
-## 🚩 `jesus.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "jesus.json" but id is "sea_salt". The "id" field must exactly match the filename (case-sensitive).` | `` |
-
-## 🚩 `karen.json`
+### 🚩 `karen.json`
 
 **3 issue(s)**
 
@@ -129,15 +43,7 @@
 | 25 | 🗳️ Political | REVIEW ONLY | `president` | `"id":           "HOA president",` |
 | 26 | 🗳️ Political | REVIEW ONLY | `president` | `"name":         "Im the HOA president",` |
 
-## 🚩 `rayan.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "rayan.json" but id is "draghsock". The "id" field must exactly match the filename (case-sensitive).` | `` |
-
-## 🚩 `russia.json`
+### 🚩 `russia.json`
 
 **3 issue(s)**
 
@@ -147,7 +53,7 @@
 | 7 | 🗳️ Political | REVIEW ONLY | `Russia` | `"description": "Russia.",` |
 | 47 | 🗳️ Political | REVIEW ONLY | `communism` | `"name":         "Revert to communism",` |
 
-## 🚩 `trashlon.json`
+### 🚩 `trashlon.json`
 
 **1 issue(s)**
 
@@ -155,7 +61,108 @@
 |------|----------|--------|-------------------|-----------|
 | 27 | 😠 Bullying/Targeting | REVIEW ONLY | `stinks` | `"desc": "Exhales a puff of truly awful air. May confuse, mostly just stinks.",` |
 
-## 🚩 `umpire.json`
+
+---
+
+## 🔧 Syntax / ID Errors Only
+
+### 🚩 `Dylan.json`
+
+**1 issue(s)**
+
+| Line | Category | Action | Matched / Message | Full Line |
+|------|----------|--------|-------------------|-----------|
+| — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "Dylan.json" but id is "yourfakemon". The "id" field must exactly match the filename (case-sensitive).` | `` |
+
+### 🚩 `Gorgrigralla.json`
+
+**1 issue(s)**
+
+| Line | Category | Action | Matched / Message | Full Line |
+|------|----------|--------|-------------------|-----------|
+| — | 📛 ID/Filename | REVIEW ONLY | `Case mismatch — filename is "Gorgrigralla.json" but id is "gorgrigralla". Did you mean id: "Gorgrigralla"?  (IDs are case-sensitive)` | `` |
+
+### 🚩 `Milo.json`
+
+**1 issue(s)**
+
+| Line | Category | Action | Matched / Message | Full Line |
+|------|----------|--------|-------------------|-----------|
+| — | 📛 ID/Filename | REVIEW ONLY | `Case mismatch — filename is "Milo.json" but id is "milo". Did you mean id: "Milo"?  (IDs are case-sensitive)` | `` |
+
+### 🚩 `RUBEN_ESTRADA.json`
+
+**1 issue(s)**
+
+| Line | Category | Action | Matched / Message | Full Line |
+|------|----------|--------|-------------------|-----------|
+| — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "RUBEN_ESTRADA.json" but id is "volkong". The "id" field must exactly match the filename (case-sensitive).` | `` |
+
+### 🚩 `Snivix.json`
+
+**1 issue(s)**
+
+| Line | Category | Action | Matched / Message | Full Line |
+|------|----------|--------|-------------------|-----------|
+| — | 📛 ID/Filename | REVIEW ONLY | `Case mismatch — filename is "Snivix.json" but id is "snivix". Did you mean id: "Snivix"?  (IDs are case-sensitive)` | `` |
+
+### 🚩 `Wallzz.json`
+
+**1 issue(s)**
+
+| Line | Category | Action | Matched / Message | Full Line |
+|------|----------|--------|-------------------|-----------|
+| — | 📛 ID/Filename | REVIEW ONLY | `Case mismatch — filename is "Wallzz.json" but id is "wallzz". Did you mean id: "Wallzz"?  (IDs are case-sensitive)` | `` |
+
+### 🚩 `Yuji.json`
+
+**1 issue(s)**
+
+| Line | Category | Action | Matched / Message | Full Line |
+|------|----------|--------|-------------------|-----------|
+| — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "Yuji.json" but id is "yourfakemon". The "id" field must exactly match the filename (case-sensitive).` | `` |
+
+### 🚩 `aidan.json`
+
+**1 issue(s)**
+
+| Line | Category | Action | Matched / Message | Full Line |
+|------|----------|--------|-------------------|-----------|
+| — | 📛 ID/Filename | REVIEW ONLY | `Could not parse JSON to check id field: Expecting value: line 34 column 17 (char 704)` | `` |
+
+### 🚩 `caypybara.json`
+
+**1 issue(s)**
+
+| Line | Category | Action | Matched / Message | Full Line |
+|------|----------|--------|-------------------|-----------|
+| — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "caypybara.json" but id is "kyan1_1". The "id" field must exactly match the filename (case-sensitive).` | `` |
+
+### 🚩 `jacob.json`
+
+**1 issue(s)**
+
+| Line | Category | Action | Matched / Message | Full Line |
+|------|----------|--------|-------------------|-----------|
+| — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "jacob.json" but id is "Conquest". The "id" field must exactly match the filename (case-sensitive).` | `` |
+
+### 🚩 `jesus.json`
+
+**1 issue(s)**
+
+| Line | Category | Action | Matched / Message | Full Line |
+|------|----------|--------|-------------------|-----------|
+| — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "jesus.json" but id is "sea_salt". The "id" field must exactly match the filename (case-sensitive).` | `` |
+
+### 🚩 `rayan.json`
+
+**1 issue(s)**
+
+| Line | Category | Action | Matched / Message | Full Line |
+|------|----------|--------|-------------------|-----------|
+| — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "rayan.json" but id is "draghsock". The "id" field must exactly match the filename (case-sensitive).` | `` |
+
+### 🚩 `umpire.json`
 
 **1 issue(s)**
 
@@ -163,7 +170,7 @@
 |------|----------|--------|-------------------|-----------|
 | — | 📛 ID/Filename | REVIEW ONLY | `Case mismatch — filename is "umpire.json" but id is "Umpire". Did you mean id: "umpire"?  (IDs are case-sensitive)` | `` |
 
-## 🚩 `zachary.json`
+### 🚩 `zachary.json`
 
 **1 issue(s)**
 
