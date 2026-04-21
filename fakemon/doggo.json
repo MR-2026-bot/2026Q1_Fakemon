@@ -1,0 +1,65 @@
+{
+  "id": "milo_1",
+  "name": "doggie",
+  "createdBy": "Milo Reinhold",
+  "emoji": "🐕",
+  "type": "Electric",
+  "hp": 200,
+  "atk": 180,
+  "speed": 150,
+  "defense": 70,
+  "accuracy": 100,
+  "color": "#ffffff",
+  "description": "A doggo that's electronic but still a living being.",
+  "moves": [
+    {
+      "id": "milo_m1",
+      "name": "bite",
+      "speed": "fast",
+      "damage": [
+        1e+24,
+        7e+31
+      ],
+      "status": "confuse",
+      "statusChance": 1,
+      "desc": "A bite that hurts a lot"
+    },
+    {
+      "id": "milo_m2",
+      "name": "scratch",
+      "speed": "fast",
+      "damage": [
+        28,
+        36
+      ],
+      "status": null,
+      "statusChance": 0,
+      "desc": "scratch something"
+    },
+    {
+      "id": "milo_m3",
+      "name": "get the owner",
+      "speed": "fast",
+      "damage": [
+        0,
+        0
+      ],
+      "status": "statup",
+      "statusChance": 1,
+      "desc": "you go get the owner.",
+      "statTarget": "speed"
+    },
+    {
+      "id": "milo_m4",
+      "name": "sleep dust",
+      "speed": "fast",
+      "damage": [
+        100,
+        9000000
+      ],
+      "status": "sleep",
+      "statusChance": 1,
+      "desc": "sleepy time now."
+    }
+  ]
+}
