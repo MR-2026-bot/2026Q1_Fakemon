@@ -1057,11 +1057,11 @@ h2, h1 { scroll-margin-top: 24px; }
     <table class="guide-table" style="margin:14px 0;">
       <thead><tr><th style="width:60px;">Step</th><th>What to do</th></tr></thead>
       <tbody>
-        <tr><td class="center" style="font-size:24px;">1️⃣</td><td>Put your file (e.g. <code>myfakemon.json</code>) inside the <code>fakemon/</code> folder.</td></tr>
-        <tr><td class="center" style="font-size:24px;">2️⃣</td><td>Open <code>fakemon/fakemonlist.json</code> and add your Fakemon's filename to the list.</td></tr>
+        <tr><td class="center" style="font-size:24px;">1️⃣</td><td>Put your file (e.g. <code>myfakemon.json</code>) inside the <code>fakemon/json/</code> folder.</td></tr>
+        <tr><td class="center" style="font-size:24px;">2️⃣</td><td>Open <code>fakemon/fakemonlist.json</code> and add your Fakemon's ID (without <code>.json</code>) to the list.</td></tr>
       </tbody>
     </table>
-    <p>Here's what <code>fakemonlist.json</code> looks like — just add your filename at the end:</p>
+    <p>Here's what <code>fakemonlist.json</code> looks like — just add your Fakemon's ID (no <code>.json</code> needed) at the end:</p>
     <div class="code-wrap" id="block-fakemonlist" style="margin-top:10px;">
       <button class="copy-btn" data-target="block-fakemonlist">📋 Copy</button>
       <pre><span class="cp">[</span>
@@ -1485,7 +1485,7 @@ h2, h1 { scroll-margin-top: 24px; }
           </div>
           <div>
             <div class="bug-label">How to fix it</div>
-            <p style="font-size:14px;">Open <code>fakemon/fakemonlist.json</code> and add your filename to the array. Make sure the filename matches exactly — including <code>.json</code> at the end and correct capitalisation.</p>
+            <p style="font-size:14px;">Open <code>fakemon/fakemonlist.json</code> and add your Fakemon's ID to the array. Your JSON file should be in <code>fakemon/json/</code>. Make sure the filename matches exactly — including <code>.json</code> at the end and correct capitalisation.</p>
           </div>
         </div>
       </div>

@@ -1,0 +1,75 @@
+{
+  "id":          "hi",
+  "name":        "mei-un lamp",
+  "createdBy":   "Liam Johnson",
+  "emoji":       "🪔",
+  "type":        "Metal",
+  "description": "Mercy is NOT an option.",
+  "hp":       100000000000000,
+  "power":    1000,
+  "speed":    100000000000000,
+  "defense":  100000000000000,
+  "accuracy": 100000000000000,
+
+  "moves": [
+    {
+      "id":           "1",
+      "name":         "Taunt",
+      "desc":         "Mock this useless creature.",
+      "speed":        "fast",
+      "damage": [1, 0],
+      "status":       "paralyze",
+      "statusChance": 1.0
+    },
+    {
+      "id":           "move_tw",
+      "name":         "Why",
+      "desc":         "Why?.",
+      "speed":        "fast",
+      "damage": [1, 5],
+      "status":       "statdwn",
+      "statusChance": 1.0
+    },
+    {
+      "id":           "move_three",
+      "name":         "💊 instant heal",
+      "desc":         "Restores your life.",
+      "speed":        "fast",
+      "damage": [-500, -600],
+      "status":       "statup",
+      "statusChance": 1.0
+    },
+    {
+      "id":           "move_four",
+      "name":         "Kill",
+      "desc":         "Gone.",
+      "speed":        "fast",
+      "damage": [100000000000000, 100000000000],
+      "status":       "statup",
+      "statusChance": 1.0,
+      "statTarget":   "atk"
+    },
+    {
+      "id":           "move_five",
+      "name":         "📉 get some ATK",
+      "desc":         "??!';/<).",
+      "speed":        "fast",
+      "damage": [0, 1],
+      "status":       "statdwn",
+      "statusChance": 1.0,
+      "statTarget":   "speed"
+    },
+    {
+      "id":    "move_six",
+      "name":  "tickle them",
+      "desc":  "Hits, then may poison AND confuse!",
+      "speed": "fast",
+      "damage": [88, 99],
+      "statuses": [
+        { "status": "poison",  "statusChance": 1.0 },
+        { "status": "confuse", "statusChance": 1.0 }
+      ]
+    }
+
+  ]
+}

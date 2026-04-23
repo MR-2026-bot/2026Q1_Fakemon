@@ -1,0 +1,69 @@
+{
+  "id":          "russia",
+  "name":        "Славься, славься, родина-Россия!Сквозь века и грозы ты прошла И сияет солнце над тобою И судьба твоя светла. Над старинным московским Кремлём Вьётся знамя с двуглавым орлом И звучат священные слова: «Славься, Русь – Отчизна моя!",
+  "createdBy":   "Ethan",
+  "emoji":       "🐲",
+  "type":        "Normal",
+  "description": "Russia.",
+  "hp":       100,
+  "power":    100,
+  "speed":    90,
+  "defense":  10,
+  "accuracy": 90,
+
+  "moves": [
+    {
+      "id":           "FSSRF",
+      "name":         "Federal Security Service of the Russian Federation",
+      "desc":         "A straightforward attack.",
+      "speed":        "medium",
+      "damage": [40, 50],
+      "status":       null,
+      "statusChance": 0
+    },
+
+     {
+      "id":           "napo",
+      "name":         "Napoleon's Mistake",
+      "desc":         "A straightforward attack.",
+      "speed":        "medium",
+      "damage": [30, 60],
+      "status":       null,
+      "statusChance": 0
+    },
+
+    
+    {
+      "id":           "aid",
+      "name":         "💊 Foreign Aid",
+      "desc":         "Restores 50 HP.",
+      "speed":        "slow",
+      "damage": [-50, -50],
+      "status":       null,
+      "statusChance": 0
+    },
+    {
+      "id":           "reversion",
+      "name":         "Revert to communism",
+      "desc":         "Sharply raises your own ATK.",
+      "speed":        "fast",
+      "damage": [0, 0],
+      "status":       "statup",
+      "statusChance": 1.0,
+      "statTarget":   "atk"
+    },
+    
+    {
+      "id":    "Superpower",
+      "name":  "😵 Nuclear Superpower",
+      "desc":  "Here comes the sun",
+      "speed": "slow",
+      "damage": [10, 16],
+      "statuses": [
+        { "status": "poison",  "statusChance": 1 },
+        { "status": "burn", "statusChance": 1 }
+      ]
+    }
+
+  ]
+}

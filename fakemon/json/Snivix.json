@@ -26,7 +26,7 @@
       "name":         "☠️ Potassiam Poisoning",
       "desc":         "You stuff 135,000 bananas down your opponents throat.",
       "speed":        "medium",
-      "damage": [1, 1800000000],
+      "damage": [1, 180],
       "status":       "paralyze",
       "statusChance": 0.73
     },
