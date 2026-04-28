@@ -1,0 +1,65 @@
+{
+  "id": "reinhold_1",
+  "name": "101st Airborne",
+  "createdBy": "Milo Reinhold",
+  "emoji": "🪂",
+  "type": "Air",
+  "hp": 150,
+  "atk": 120,
+  "speed": 150,
+  "defense": 10,
+  "accuracy": 90,
+  "color": "#c9b576",
+  "description": "An airborne division designed to destroy storm troopers.",
+  "moves": [
+    {
+      "id": "reinhold_m1",
+      "name": "Ambush",
+      "speed": "fast",
+      "damage": [
+        8,
+        50
+      ],
+      "status": "confuse",
+      "statusChance": 0.5,
+      "desc": "A preplanned ambush."
+    },
+    {
+      "id": "reinhold_m2",
+      "name": "fire bazooka",
+      "speed": "slow",
+      "damage": [
+        28,
+        70
+      ],
+      "status": "burn",
+      "statusChance": 0.5,
+      "desc": "fire a bazooka at the enemy."
+    },
+    {
+      "id": "reinhold_m3",
+      "name": "Get reinforcements",
+      "speed": "medium",
+      "damage": [
+        0,
+        0
+      ],
+      "status": "statup",
+      "statusChance": 1,
+      "desc": "The division gets more units dropped.",
+      "statTarget": "atk"
+    },
+    {
+      "id": "reinhold_m4",
+      "name": "A night attack",
+      "speed": "fast",
+      "damage": [
+        5,
+        100
+      ],
+      "status": "sleep",
+      "statusChance": 1,
+      "desc": "sleepy time for the enemy fighting time for you."
+    }
+  ]
+}
