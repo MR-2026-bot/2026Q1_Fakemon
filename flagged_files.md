@@ -1,8 +1,8 @@
 # Fakemon Content Check Report
 
-**Generated:** 2026-04-23 18:53:53  
-**Files scanned:** 95  
-**Files flagged:** 33  
+**Generated:** 2026-04-28 18:44:00  
+**Files scanned:** 101  
+**Files flagged:** 28  
 
 ---
 
@@ -27,14 +27,6 @@
 | — | 📛 ID/Filename | REVIEW ONLY | `Near-miss — filename is "candiru.json" but id is "candiru1_1" (82% similar). Did you mean id: "candiru"?` | `` |
 | 16 | 🤬 Profanity | AUTO-SANITIZE | `piss` | `"name": "don't piss",` |
 | 36 | 😠 Bullying/Targeting | REVIEW ONLY | `weak` | `"desc": "Swims up the water Spout so it can find your weak point."` |
-
-### 🚩 `eurasianbear.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| 13 | 🗳️ Political | REVIEW ONLY | `Russia` | `"description": "Born in Russia Raised by Russia Lives for Russia",` |
 
 ### 🚩 `hi.json`
 
@@ -72,11 +64,10 @@
 
 ### 🚩 `poisonivy.json`
 
-**2 issue(s)**
+**1 issue(s)**
 
 | Line | Category | Action | Matched / Message | Full Line |
 |------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Near-miss — filename is "poisonivy.json" but id is "poisonivy_1" (90% similar). Did you mean id: "poisonivy"?` | `` |
 | 99 | 😠 Bullying/Targeting | REVIEW ONLY | `weak` | `"desc": "weak defense",` |
 
 ### 🚩 `russia.json`
@@ -125,22 +116,6 @@
 | Line | Category | Action | Matched / Message | Full Line |
 |------|----------|--------|-------------------|-----------|
 | — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "Dylan.json" but id is "yourfakemon". The "id" field must exactly match the filename (case-sensitive).` | `` |
-
-### 🚩 `Gorgrigralla.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Case mismatch — filename is "Gorgrigralla.json" but id is "gorgrigralla". Did you mean id: "Gorgrigralla"?  (IDs are case-sensitive)` | `` |
-
-### 🚩 `Marlow_1.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Case mismatch — filename is "Marlow_1.json" but id is "marlow_1". Did you mean id: "Marlow_1"?  (IDs are case-sensitive)` | `` |
 
 ### 🚩 `Milo.json`
 
@@ -222,14 +197,6 @@
 |------|----------|--------|-------------------|-----------|
 | — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "jacob.json" but id is "Conquest". The "id" field must exactly match the filename (case-sensitive).` | `` |
 
-### 🚩 `jellyfish.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Near-miss — filename is "jellyfish.json" but id is "jellyfish_1" (90% similar). Did you mean id: "jellyfish"?` | `` |
-
 ### 🚩 `jesus.json`
 
 **1 issue(s)**
@@ -253,14 +220,6 @@
 | Line | Category | Action | Matched / Message | Full Line |
 |------|----------|--------|-------------------|-----------|
 | — | 📛 ID/Filename | REVIEW ONLY | `Mismatch — filename is "rayan.json" but id is "draghsock". The "id" field must exactly match the filename (case-sensitive).` | `` |
-
-### 🚩 `robinson.json`
-
-**1 issue(s)**
-
-| Line | Category | Action | Matched / Message | Full Line |
-|------|----------|--------|-------------------|-----------|
-| — | 📛 ID/Filename | REVIEW ONLY | `Near-miss — filename is "robinson.json" but id is "robinson1_1" (84% similar). Did you mean id: "robinson"?` | `` |
 
 ### 🚩 `stormtrooper.json`
 
